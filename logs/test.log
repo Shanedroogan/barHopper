@@ -1,0 +1,107 @@
+2020-04-05 16:32:58,960 ERROR: Exception on /user/shane [GET] [in /usr/local/lib/python3.6/dist-packages/flask/app.py:1891]
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.6/dist-packages/flask/app.py", line 2446, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/usr/local/lib/python3.6/dist-packages/flask/app.py", line 1951, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/usr/local/lib/python3.6/dist-packages/flask/app.py", line 1820, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "/usr/local/lib/python3.6/dist-packages/flask/_compat.py", line 39, in reraise
+    raise value
+  File "/usr/local/lib/python3.6/dist-packages/flask/app.py", line 1949, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/usr/local/lib/python3.6/dist-packages/flask/app.py", line 1935, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "/usr/local/lib/python3.6/dist-packages/flask_login/utils.py", line 272, in decorated_view
+    return func(*args, **kwargs)
+  File "/home/ubuntu/notebooks/barhopper/barHopper/app/routes.py", line 104, in user
+    crawls = user.trips.order_by(Crawl.timestamp.desc()).paginate(
+AttributeError: 'User' object has no attribute 'trips'
+2020-04-05 16:35:00,510 ERROR: Exception on /user/shane [GET] [in /usr/local/lib/python3.6/dist-packages/flask/app.py:1891]
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.6/dist-packages/flask/app.py", line 2446, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/usr/local/lib/python3.6/dist-packages/flask/app.py", line 1951, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/usr/local/lib/python3.6/dist-packages/flask/app.py", line 1820, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "/usr/local/lib/python3.6/dist-packages/flask/_compat.py", line 39, in reraise
+    raise value
+  File "/usr/local/lib/python3.6/dist-packages/flask/app.py", line 1949, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/usr/local/lib/python3.6/dist-packages/flask/app.py", line 1935, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "/usr/local/lib/python3.6/dist-packages/flask_login/utils.py", line 272, in decorated_view
+    return func(*args, **kwargs)
+  File "/home/ubuntu/notebooks/barhopper/barHopper/app/routes.py", line 104, in user
+    crawls = user.trips.order_by(Crawl.timestamp.desc()).paginate(
+AttributeError: 'User' object has no attribute 'trips'
+2020-04-06 17:45:47,230 INFO: Test startup [in /home/ubuntu/notebooks/barhopper/barHopper/app/__init__.py:51]
+2020-04-06 17:46:46,647 INFO: Test startup [in /home/ubuntu/notebooks/barhopper/barHopper/app/__init__.py:51]
+2020-04-06 17:46:51,191 ERROR: Exception on /index [GET] [in /usr/local/lib/python3.6/dist-packages/flask/app.py:1891]
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.6/dist-packages/flask/app.py", line 2446, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/usr/local/lib/python3.6/dist-packages/flask/app.py", line 1951, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/usr/local/lib/python3.6/dist-packages/flask/app.py", line 1820, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "/usr/local/lib/python3.6/dist-packages/flask/_compat.py", line 39, in reraise
+    raise value
+  File "/usr/local/lib/python3.6/dist-packages/flask/app.py", line 1949, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/usr/local/lib/python3.6/dist-packages/flask/app.py", line 1935, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "/home/ubuntu/notebooks/barhopper/barHopper/app/routes.py", line 14, in index
+    return render_template('index.html', title='Home')
+  File "/usr/local/lib/python3.6/dist-packages/flask/templating.py", line 140, in render_template
+    ctx.app,
+  File "/usr/local/lib/python3.6/dist-packages/flask/templating.py", line 120, in _render
+    rv = template.render(context)
+  File "/usr/local/lib/python3.6/dist-packages/jinja2/environment.py", line 1090, in render
+    self.environment.handle_exception()
+  File "/usr/local/lib/python3.6/dist-packages/jinja2/environment.py", line 832, in handle_exception
+    reraise(*rewrite_traceback_stack(source=source))
+  File "/usr/local/lib/python3.6/dist-packages/jinja2/_compat.py", line 28, in reraise
+    raise value.with_traceback(tb)
+  File "/home/ubuntu/notebooks/barhopper/barHopper/app/templates/index.html", line 2, in top-level template code
+    {% import 'bootstrap/wtf.html' as wtf %}
+  File "/home/ubuntu/notebooks/barhopper/barHopper/app/templates/base.html", line 1, in top-level template code
+    {% extends 'bootstrap/base.html' %}
+  File "/usr/local/lib/python3.6/dist-packages/flask_bootstrap/templates/bootstrap/base.html", line 1, in top-level template code
+    {% block doc -%}
+  File "/usr/local/lib/python3.6/dist-packages/flask_bootstrap/templates/bootstrap/base.html", line 3, in block "doc"
+    <html{% block html_attribs %}{% endblock html_attribs %}>
+  File "/usr/local/lib/python3.6/dist-packages/flask_bootstrap/templates/bootstrap/base.html", line 4, in block "html"
+    {%- block html %}
+  File "/usr/local/lib/python3.6/dist-packages/flask_bootstrap/templates/bootstrap/base.html", line 6, in block "head"
+    {%- block head %}
+  File "/home/ubuntu/notebooks/barhopper/barHopper/app/templates/base.html", line 6, in block "styles"
+    href="{{url_for(filename='./styles/mystyle.css')}}">
+TypeError: url_for() missing 1 required positional argument: 'endpoint'
+2020-04-06 17:49:07,242 INFO: Test startup [in /home/ubuntu/notebooks/barhopper/barHopper/app/__init__.py:51]
+2020-04-06 18:28:48,055 INFO: Test startup [in /home/ubuntu/notebooks/barhopper/barHopper/app/__init__.py:51]
+2020-04-06 18:30:41,672 INFO: Test startup [in /home/ubuntu/notebooks/barhopper/barHopper/app/__init__.py:51]
+2020-04-06 18:33:18,809 INFO: Test startup [in /home/ubuntu/notebooks/barhopper/barHopper/app/__init__.py:51]
+2020-04-06 18:38:14,314 INFO: Test startup [in /home/ubuntu/notebooks/barhopper/barHopper/app/__init__.py:51]
+2020-04-06 18:40:36,579 ERROR: Exception on /user/shane [GET] [in /usr/local/lib/python3.6/dist-packages/flask/app.py:1891]
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.6/dist-packages/flask/app.py", line 2446, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/usr/local/lib/python3.6/dist-packages/flask/app.py", line 1951, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/usr/local/lib/python3.6/dist-packages/flask/app.py", line 1820, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "/usr/local/lib/python3.6/dist-packages/flask/_compat.py", line 39, in reraise
+    raise value
+  File "/usr/local/lib/python3.6/dist-packages/flask/app.py", line 1949, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/usr/local/lib/python3.6/dist-packages/flask/app.py", line 1935, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "/usr/local/lib/python3.6/dist-packages/flask_login/utils.py", line 272, in decorated_view
+    return func(*args, **kwargs)
+  File "/home/ubuntu/notebooks/barhopper/barHopper/app/routes.py", line 104, in user
+    crawls = user.trips.order_by(Crawl.timestamp.desc()).paginate(
+AttributeError: 'User' object has no attribute 'trips'
+2020-04-07 21:17:45,441 INFO: Test startup [in /home/ubuntu/notebooks/barhopper/barHopper/app/__init__.py:51]
+2020-04-07 21:18:27,476 INFO: Test startup [in /home/ubuntu/notebooks/barhopper/barHopper/app/__init__.py:51]
