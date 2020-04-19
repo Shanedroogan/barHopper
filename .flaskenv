@@ -1,1 +1,2 @@
 FLASK_APP=barhopper.py
+FLASK_ENV=development

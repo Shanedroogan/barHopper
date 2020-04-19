@@ -18,10 +18,13 @@ def index():
 
 @app.route('/customize_crawl', methods=['GET', 'POST'])
 def customize_crawl():
-    form = CustomizePreferences()
+    form = CustomizePreferences(request.form)
 
-    if form.validate_on_submit():
-        return redirect(url_for('output'))
+    if form.validate():
+        result_list = create_crawl(user_lat = form.latitude.data, user_long=form.longitude.data)
+        return render_template('final_crawl.html', result_list=result_list)
+        
+    return render_template("customize_crawl.html", form=form)
 
 @app.route('/login', methods = ['GET', 'POST'])
 def login():
@@ -54,7 +57,7 @@ def logout():
 
 @app.route('/output', methods=['GET', 'POST'])
 def output():
-    result_list = create_crawl()
+    result_list = request.args.get('result_list')
     return render_template('final_crawl.html', result_list=result_list)
 
 
