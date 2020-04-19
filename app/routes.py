@@ -20,8 +20,8 @@ def index():
 def customize_crawl():
     form = CustomizePreferences()
 
-    #if form.validate_on_submit():
-
+    if form.validate_on_submit():
+        return redirect(url_for('output'))
 
 @app.route('/login', methods = ['GET', 'POST'])
 def login():
@@ -53,7 +53,7 @@ def logout():
 
 
 @app.route('/output', methods=['GET', 'POST'])
-def display_crawl():
+def output():
     result_list = create_crawl()
     return render_template('final_crawl.html', result_list=result_list)
 
