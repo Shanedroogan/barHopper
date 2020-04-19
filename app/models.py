@@ -1,12 +1,11 @@
 from datetime import datetime
-from app import db
+from app import app, db
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from app import login
 from hashlib import md5
 from time import time
 import jwt
-from app import app
 
 #password generation, storage, and recovery based on Miguel Grinberg's flask implementation
 class User(UserMixin, db.Model):

@@ -6,13 +6,13 @@ from app.models import User
 from app.email import send_password_reset_email
 from werkzeug.urls import url_parse
 from datetime import datetime
+from app.utils import create_crawl
 
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
 def index():
     return render_template('index.html', title='Home')
-
 
 
 @app.route('/login', methods = ['GET', 'POST'])
@@ -38,12 +38,16 @@ def login():
     return render_template('login.html', title='Sign In', form=form)
 
 
-
 @app.route('/logout')
 def logout():
     logout_user()
     return redirect(url_for('index'))
 
+
+@app.route('/output', methods=['GET', 'POST'])
+def display_crawl():
+    result_list = create_crawl()
+    return render_template('final_crawl.html', result_list=result_list)
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -62,7 +66,6 @@ def register():
     return render_template('register.html', title='Register', form=form)
 
 
-
 @app.route('/reset_password_request', methods=['GET', 'POST'])
 def reset_password_request():
     if current_user.is_authenticated:
@@ -76,7 +79,6 @@ def reset_password_request():
         return redirect(url_for('login'))
     return render_template('reset_password_request.html',
                             title='Reset Password', form=form)
-
 
 
 @app.route('/reset_password/<token>', methods=['GET', 'POST'])
@@ -93,7 +95,6 @@ def reset_password(token):
         flash('Your password has been reset.')
         return redirect(url_for('login'))
     return render_template('reset_password.html', form=form)
-
 
 
 @app.route('/user/<username>', methods=['GET', 'POST'])
