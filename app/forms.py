@@ -1,9 +1,17 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, DateTimeField, DecimalField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
 from app.models import User
 from wtforms import TextAreaField
 from wtforms.validators import Length
+from datetime import datetime
+
+
+class CustomizePreferences(FlaskForm):
+    date_and_time = DateTimeField(default=datetime.now())
+    latitude = DecimalField('Latitude', places = 6, validators=[DataRequired()])
+    longitude = DecimalField('Longitude', places = 6, validators=[DataRequired()])
+    submit = SubmitField('Get Hoppin!')
 
 
 class LoginForm(FlaskForm):

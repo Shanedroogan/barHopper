@@ -1,6 +1,7 @@
 from flask import render_template, flash, redirect, url_for, request, jsonify
 from app import app, db
 from app.forms import LoginForm, RegistrationForm, ResetPasswordRequestForm, ResetPasswordForm
+from app.forms import CustomizePreferences
 from flask_login import current_user, login_user, logout_user, login_required
 from app.models import User
 from app.email import send_password_reset_email
@@ -13,6 +14,13 @@ from app.utils import create_crawl
 @app.route('/index', methods=['GET', 'POST'])
 def index():
     return render_template('index.html', title='Home')
+
+
+@app.route('/customize_crawl', methods=['GET', 'POST'])
+def customize_crawl():
+    form = CustomizePreferences()
+
+    #if form.validate_on_submit():
 
 
 @app.route('/login', methods = ['GET', 'POST'])
