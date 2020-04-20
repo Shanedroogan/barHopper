@@ -13,6 +13,7 @@ import os
 app = Flask(__name__)
 app.config.from_object(Config)
 db = SQLAlchemy(app)
+db.Model.metadata.reflect(db.engine)
 migrate = Migrate(app, db)
 login = LoginManager(app)
 login.login_view = 'login'

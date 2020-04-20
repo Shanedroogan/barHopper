@@ -1,9 +1,9 @@
-from flask import render_template, flash, redirect, url_for, request, jsonify
+from flask import render_template, flash, redirect, url_for, request, jsonify, session
 from app import app, db
 from app.forms import LoginForm, RegistrationForm, ResetPasswordRequestForm, ResetPasswordForm
 from app.forms import CustomizePreferences
 from flask_login import current_user, login_user, logout_user, login_required
-from app.models import User
+from app.models import User, Crawl, Deal, Bar_MasterList
 from app.email import send_password_reset_email
 from werkzeug.urls import url_parse
 from datetime import datetime
@@ -18,13 +18,13 @@ def index():
 
 @app.route('/customize_crawl', methods=['GET', 'POST'])
 def customize_crawl():
-    form = CustomizePreferences(request.form)
+    form = CustomizePreferences()
 
-    if form.validate():
-        result_list = create_crawl(user_lat = form.latitude.data, user_long=form.longitude.data)
-        return render_template('final_crawl.html', result_list=result_list)
+    if form.validate_on_submit():
+        session["result_list"] = create_crawl(user_lat = form.latitude.data, user_long=form.longitude.data)
+        return redirect(url_for('output'))
         
-    return render_template("customize_crawl.html", form=form)
+    return render_template("customize_crawl.html", form=form, title='Customize')
 
 @app.route('/login', methods = ['GET', 'POST'])
 def login():
@@ -57,14 +57,28 @@ def logout():
 
 @app.route('/output', methods=['GET', 'POST'])
 def output():
-    result_list = request.args.get('result_list')
-    return render_template('final_crawl.html', result_list=result_list)
+    #receives list of bar ids from the customize page, and removes it from the session
+    #result_list = session['result_list']
+    #session.pop('result_list')
+    result_list = [1866,2,3,4,7]
+    print(result_list)
+    # bar schema: bar.(name) (address) (neighborhood) (price) 
+    # bar.(rating) (num_ratings) (latitude) (longitude)
+    bars = Bar_MasterList.query.filter(Bar_MasterList.bar_id.in_(result_list)).all() 
+    deals = [bar.deals for bar in bars]
+    for bar in bars:
+        print(bar)
+
+    return render_template('final_crawl.html', title='Your Bar Hop', bars=bars, deals=deals)
 
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+
+    #checks if user is logged in, if they are - redirect to home page
     if current_user.is_authenticated:
         return redirect(url_for('index'))
+
     form = RegistrationForm()
 
     if form.validate_on_submit():
@@ -105,7 +119,7 @@ def reset_password(token):
         db.session.commit()
         flash('Your password has been reset.')
         return redirect(url_for('login'))
-    return render_template('reset_password.html', form=form)
+    return render_template('reset_password.html', form=form, title="Reset Password")
 
 
 @app.route('/user/<username>', methods=['GET', 'POST'])
@@ -113,12 +127,12 @@ def reset_password(token):
 def user(username):
     user = User.query.filter_by(username=username).first_or_404()
     page = request.args.get('page', 1, type=int)
-    crawls = user.trips.order_by(Crawl.timestamp.desc()).paginate(
+    crawls = user.crawls.order_by(Crawl.timestamp.desc()).paginate(
         page, app.config['POSTS_PER_PAGE'], False)
     next_url = url_for('user', username=user.username, page=crawls.next_num) \
         if crawls.has_next else None
     prev_url = url_for('user', username=user.username, page=crawls.prev_num) \
         if crawls.has_next else None
 
-    return render_template('user.html', user=user, crawls=crawls.items,
+    return render_template('user.html', user=user, title='Your Hops', crawls=crawls.items,
                             next_url=next_url, prev_url=prev_url)

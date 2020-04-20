@@ -9,6 +9,7 @@ import jwt
 
 #password generation, storage, and recovery based on Miguel Grinberg's flask implementation
 class User(UserMixin, db.Model):
+    __table_args__ = {'extend_existing': True}
     id = db.Column(db.Integer, primary_key = True)
     username = db.Column(db.String(64), index = True, unique = True)
     email = db.Column(db.String(120), index = True, unique = True)
@@ -39,11 +40,23 @@ class User(UserMixin, db.Model):
         return User.query.get(id)
 
 
+class Bar_MasterList(db.Model):
+    __table__ = db.Model.metadata.tables['Bar_MasterList']
+    __table_args__ = {'extend_existing': True}
+    deals = db.relationship('Deal', backref='bar', lazy='dynamic')
+    def __repr__(self):
+        return self.name
 
-## TODO: figure out how to store bars in Crawl object
+
 class Crawl(db.Model):
+    __table_args__ = {'extend_existing' : True}
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(140))
+    bar_1 = db.Column(db.Integer, db.ForeignKey('Bar_MasterList.bar_id'))
+    bar_2 = db.Column(db.Integer, db.ForeignKey('Bar_MasterList.bar_id'))
+    bar_3 = db.Column(db.Integer, db.ForeignKey('Bar_MasterList.bar_id'))
+    bar_4 = db.Column(db.Integer, db.ForeignKey('Bar_MasterList.bar_id'))
+    bar_5 = db.Column(db.Integer, db.ForeignKey('Bar_MasterList.bar_id'))
     timestamp = db.Column(db.DateTime, index = True, default = datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     language = db.Column(db.String(5))
@@ -51,6 +64,13 @@ class Crawl(db.Model):
     def __repr__(self):
         return '<Crawl {}>'.format(self.body)
 
+
+class Deal(db.Model):
+    __table__ = db.Model.metadata.tables['Deal']
+    __table_args__ = {'extend_existing' : True}
+
+    def __repr__(self):
+        return self.deal_name
 
 
 @login.user_loader

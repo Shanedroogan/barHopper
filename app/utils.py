@@ -1,25 +1,24 @@
-from app import app
+from app import app, db
 from geopy.distance import geodesic
 from sqlalchemy import create_engine
 import pandas as pd
 from config import Config
+from app.models import Bar_MasterList
  
 
 # calculates the distance between the user and the bars 
 def distance(user_lat, user_long, bar_lat, bar_long):
-    user_cordinates = (user_lat, user_long)
-    bar_cordinates = (bar_lat, bar_long)
-    return round(geodesic(user_cordinates, bar_cordinates).miles, 1)
+    user_coordinates = (user_lat, user_long)
+    bar_coordinates = (bar_lat, bar_long)
+    return round(geodesic(user_coordinates, bar_coordinates).miles, 1)
 
 
 def create_crawl(user_lat = 40.734198,user_long=-73.988325):
-    # creates connection to database with master list
-    engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
-    con = engine.connect()
 
     # the sql query used to acces the bar master list in the barhopper db
+    #db.engine accesses the app context's connection
     query = "SELECT * FROM barhopper.Bar_MasterList"
-    df = pd.read_sql(query, con, index_col = 'bar_id')
+    df = pd.read_sql(query, db.engine, index_col = 'bar_id')
 
     # price was of type object so changed the data type to integer
     df['price'] = df['price'].astype('int64')
@@ -52,7 +51,6 @@ def create_crawl(user_lat = 40.734198,user_long=-73.988325):
         temp_lat = df2.loc[int(df2[:1].index.values), 'latitude'] 
         
         #drop bar from df
-        df2.drop([int(df2[:1].index.values)],inplace = True)
-        
+        df2.drop([int(df2[:1].index.values)],inplace = True) 
     return(return_list)
     

@@ -2,16 +2,21 @@
 
 {% block app_content %}
     <h1>Customize</h1>
-    <form method="POST">
-    {{ form.hidden_tag() }}
-        <div class="form-group">
-            {{ form.latitude.label }}
-            {{ form.latitude(size=20, class="form-control") }}
+    <div class="row">
+        <div class="col-md-4">
+            <form method="POST">
+                {{ form.hidden_tag() }}
+                <div class="form-group">
+                    {{ form.latitude.label }}
+                    {{ form.latitude(size=20, class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.longitude.label }}
+                    {{ form.longitude(size=20, class="form-control") }}
+                </div>
+                {{form.submit(class="btn btn-primary")}}
+            </form>
+            
         </div>
-        <div class="form-group">
-            {{ form.longitude.label }}
-            {{ form.longitude(size=20, class="form-control") }}
-        </div>
-        {{form.submit(class="btn btn-primary")}}
-    </form>
+    </div>
 {% endblock %}
