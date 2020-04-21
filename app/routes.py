@@ -8,6 +8,7 @@ from app.email import send_password_reset_email
 from werkzeug.urls import url_parse
 from datetime import datetime
 from app.utils import create_crawl, get_lat_and_lon
+import json
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -73,10 +74,12 @@ def output():
     bars = Bar_MasterList.query.filter(Bar_MasterList.bar_id.in_(result_list)).all()
     ratings = [int(bar.rating) * '★' for bar in bars]
     prices = [int(bar.price) * '$' for bar in bars]
+    maps_endpoint = f"https://maps.googleapis.com/maps/api/js?key={app.config['GEO_KEY']}&callback=initMap"
     #for bar in bars:
     #    print(bar)
 
-    return render_template('final_crawl.html', title='Your Bar Hop', bars=bars, ratings=ratings, prices=prices)
+    return render_template('final_crawl.html', title='Your Bar Hop', bars=bars,
+                            ratings=ratings, prices=prices, maps_endpoint=maps_endpoint)
 
 
 @app.route('/register', methods=['GET', 'POST'])

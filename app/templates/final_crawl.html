@@ -2,7 +2,7 @@
 
 {% block app_content %}
 <div class = "row">
-    <div class="col-md-8">
+    <div class="col-md-6">
       <div class="accordion">
         {% for bar in bars %}
         <div class="card">
@@ -54,5 +54,65 @@
         {% endfor %}
       </div>
     </div>
+    <div class = "col-md-6">
+      <div id="map">
+
+      </div>
+    </div>
 </div>>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  // Initialize and add the map
+  function initMap() {
+    //Init directions service
+    directionsService = new google.maps.DirectionsService();
+    directionsRenderer = new google.maps.DirectionsRenderer();
+    // The location of the bar hop
+    var hop = {lat: {{bars[2].latitude|safe}}, lng: {{bars[2].longitude|safe}}};
+    var mapOptions = {
+      zoom : 14,
+      center : hop
+    }
+    // The map, centered at the barhop
+    var map = new google.maps.Map(
+        document.getElementById('map'), mapOptions);
+    directionsRenderer.setMap(map)
+  }
+  function calcRoute() {
+  var start = new google.maps.LatLng({{ bars[0].latitude|safe }}, {{ bars[0].longitude|safe }});
+  var end = new google.maps.LatLng({{ bars[-1].latitude|safe }}, {{ bars[-1].longitude|safe }});
+  var request = {
+    origin: start,
+    destination: end,
+    travelMode: 'WALKING',
+    waypoints : [
+        {
+          location: new google.maps.LatLng({{bars[1].latitude}}, {{bars[1].longitude}}),
+          stopover : true
+        },{
+          location: new google.maps.LatLng({{bars[2].latitude}}, {{bars[2].longitude}}),
+          stopover : true
+        },{
+          location: new google.maps.LatLng({{bars[3].latitude}}, {{bars[3].longitude}}),
+          stopover : true
+        },{
+          location: new google.maps.LatLng({{bars[4].latitude}}, {{bars[4].longitude}}),
+          stopover : true
+        }]
+  };
+  directionsService.route(request, function(result, status) {
+    if (status == 'OK') {
+      directionsRenderer.setDirections(result);
+    }
+  });
+}
+      </script>
+      <script async defer
+      src={{ maps_endpoint }}>
+      </script>
+      //Calculates route on page-load
+      <script>
+        window.onload = calcRoute</script>
 {% endblock %}

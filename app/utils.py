@@ -1,7 +1,6 @@
 from app import app, db
 from geopy.distance import geodesic
 import pandas as pd
-from config import Config
 from app.models import Bar_MasterList
 import requests
 import json
