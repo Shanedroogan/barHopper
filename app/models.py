@@ -44,8 +44,9 @@ class Bar_MasterList(db.Model):
     __table__ = db.Model.metadata.tables['Bar_MasterList']
     __table_args__ = {'extend_existing': True}
     deals = db.relationship('Deal', backref='bar', lazy='dynamic')
+
     def __repr__(self):
-        return self.name
+        return f'<Bar {self.name}>'
 
 
 class Crawl(db.Model):
@@ -62,7 +63,7 @@ class Crawl(db.Model):
     language = db.Column(db.String(5))
 
     def __repr__(self):
-        return '<Crawl {}>'.format(self.body)
+        return f'<Crawl {self.body}>'
 
 
 class Deal(db.Model):
@@ -70,7 +71,7 @@ class Deal(db.Model):
     __table_args__ = {'extend_existing' : True}
 
     def __repr__(self):
-        return self.deal_name
+        return f'<Deal {self.deal_name}>'
 
 
 @login.user_loader

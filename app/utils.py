@@ -52,5 +52,5 @@ def create_crawl(user_lat = 40.734198,user_long=-73.988325):
         
         #drop bar from df
         df2.drop([int(df2[:1].index.values)],inplace = True) 
-    return(return_list)
+    return return_list
     

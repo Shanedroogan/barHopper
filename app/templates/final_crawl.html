@@ -2,37 +2,47 @@
 
 {% block app_content %}
 <div class = "row">
-    <div class="col-md-6">
+    <div class="col-md-8">
         <div class="card">
-            <div class="card-header">
-              <ul class="nav nav-tabs card-header-tabs" id="bar0-list" role="tablist">
-                <li class="nav-item">
-                  <a class="nav-link active" href="#overview" role="tab" aria-controls="overview" aria-selected="true">Overview</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link"  href="#deals" role="tab" aria-controls="history" aria-selected="false">Deals</a>
-                </li>
-              </ul>
+          <div class="row no-gutters">
+            <div class="col-3">
+              <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-overview" role="tab" aria-controls="v-pills-overview" aria-selected="true">Overview</a>
+                <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-deals" role="tab" aria-controls="v-pills-deals" aria-selected="false">Deals</a>
+              </div>
             </div>
-            <div class="card-body">
-              <h4 class="card-title">{{bars[0].name}}</h4>
-              <h6 class="card-subtitle mb-2">{{bars[0].address}}</h6>
-              
-               <div class="tab-content mt-3">
-                <div class="tab-pane active" id="description" role="tabpanel">
-                  <p class="card-text">Price: {{bar.price}}</p>
-                  <p class="card-text">Rating: {{bar.rating}}</p>
-                  <a href="#" class="card-link text-danger">Read more</a>
+            <div class="col-9">
+              <div class="tab-content" id="v-pills-tabContent">
+                <div class="tab-pane fade show active" id="v-pills-overview" role="tabpanel" aria-labelledby="v-pills-overview-tab">
+                    <ul class="list-group list-group-flush">
+                      <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <h4>{{ bars[0].name }}</h4>
+                      </li>
+                      <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <small>{{ bars[0].address }}</small>
+                        <span class="badge badge-primary badge-pill">Dive Bar</span>
+                      </li>
+                      <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <small>Price: {{ bars[0].price }}</small>
+                      </li>
+                      <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Rating: {{ bars[0].rating }}
+                      </li>
+                    </ul>
                 </div>
-                 
-                <div class="tab-pane" id="deals" role="tabpanel" aria-labelledby="deals-tab">
-                    
-                    <p class="card-text"></p>
-                  <a href="#" class="btn btn-danger btn-sm">Get Deals</a>
+                <div class="tab-pane fade" id="v-pills-deals" role="tabpanel" aria-labelledby="v-pills-deals-tab">
+                    <ul class="list-group">
+                      {% for deal in bars[0].deals %}
+                      <li class="list-group-item d-flex justify-content-between align-items-center">
+                          {{ deal.deal_name}}
+                      </li>
+                      {% endfor %}
+                    </ul>
                 </div>
               </div>
             </div>
           </div>
+        </div>
     </div>
-</div>
+</div>>
 {% endblock %}

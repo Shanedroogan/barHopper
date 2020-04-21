@@ -21,8 +21,12 @@ def customize_crawl():
     form = CustomizePreferences()
 
     if form.validate_on_submit():
-        session["result_list"] = create_crawl(user_lat = form.latitude.data, user_long=form.longitude.data)
-        return redirect(url_for('output'))
+        #create_crawl() fetches ordered list of bar ids
+        result_list = create_crawl(user_lat = form.latitude.data, user_long=form.longitude.data)
+        
+        #join converts to comma separated values to pass as parameters
+        result_list = ','.join(str(r) for r in result_list)
+        return redirect(url_for('output', result_list=result_list))
         
     return render_template("customize_crawl.html", form=form, title='Customize')
 
@@ -57,19 +61,18 @@ def logout():
 
 @app.route('/output', methods=['GET', 'POST'])
 def output():
-    #receives list of bar ids from the customize page, and removes it from the session
-    #result_list = session['result_list']
-    #session.pop('result_list')
-    result_list = [1866,2,3,4,7]
-    print(result_list)
+    #receives list of bar ids from the customize page
+    #result_list = [int(r) for r in request.args.get('result_list').split(',')]
+    
+    #For Testing :
+    result_list = [1866]
     # bar schema: bar.(name) (address) (neighborhood) (price) 
     # bar.(rating) (num_ratings) (latitude) (longitude)
-    bars = Bar_MasterList.query.filter(Bar_MasterList.bar_id.in_(result_list)).all() 
-    deals = [bar.deals for bar in bars]
-    for bar in bars:
-        print(bar)
+    bars = Bar_MasterList.query.filter(Bar_MasterList.bar_id.in_(result_list)).all()
+    #for bar in bars:
+    #    print(bar)
 
-    return render_template('final_crawl.html', title='Your Bar Hop', bars=bars, deals=deals)
+    return render_template('final_crawl.html', title='Your Bar Hop', bars=bars)
 
 
 @app.route('/register', methods=['GET', 'POST'])

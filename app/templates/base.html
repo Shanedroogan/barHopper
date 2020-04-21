@@ -80,10 +80,10 @@
         $('li.active').removeClass('active');
         $('a[href="' + location.pathname + '"]').closest('li').addClass('active'); 
       });</script>
-    <script>$('#bologna-list a').on('click', function (e) {
+    {{ moment.include_moment() }}
+    {{ moment.lang(g.locale) }}
+    <script>$('#bar-list a').on('click', function (e) {
         e.preventDefault()
         $(this).tab('show')
       })</script>
-    {{ moment.include_moment() }}
-    {{ moment.lang(g.locale) }}
 </body>

@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 
 {% block app_content %}
+<!--pages are sorted vertically with rows, and column classes limit the horizontal width
+This page currently has 1 row, and a column that's limited to 33% width-->
     <div class="row">
         <div class="col-md-4">
             {% if current_user.is_authenticated %}
