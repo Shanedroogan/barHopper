@@ -9,8 +9,7 @@ from datetime import datetime
 
 class CustomizePreferences(FlaskForm):
     date_and_time = DateTimeField(default=datetime.now())
-    latitude = DecimalField('Latitude', places = 6, validators=[DataRequired()])
-    longitude = DecimalField('Longitude', places = 6, validators=[DataRequired()])
+    address = StringField('Location')
     submit = SubmitField('Get Hoppin!')
 
 

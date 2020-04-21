@@ -7,7 +7,7 @@ from app.models import User, Crawl, Deal, Bar_MasterList
 from app.email import send_password_reset_email
 from werkzeug.urls import url_parse
 from datetime import datetime
-from app.utils import create_crawl
+from app.utils import create_crawl, get_lat_and_lon
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -22,7 +22,9 @@ def customize_crawl():
 
     if form.validate_on_submit():
         #create_crawl() fetches ordered list of bar ids
-        result_list = create_crawl(user_lat = form.latitude.data, user_long=form.longitude.data)
+        print(form.address.data)
+        lat, lon = get_lat_and_lon(form.address.data)
+        result_list = create_crawl(user_lat = lat, user_long=lon)
         
         #join converts to comma separated values to pass as parameters
         result_list = ','.join(str(r) for r in result_list)
@@ -62,17 +64,19 @@ def logout():
 @app.route('/output', methods=['GET', 'POST'])
 def output():
     #receives list of bar ids from the customize page
-    #result_list = [int(r) for r in request.args.get('result_list').split(',')]
+    result_list = [int(r) for r in request.args.get('result_list').split(',')]
     
     #For Testing :
-    result_list = [1866]
+    #result_list = [1866]
     # bar schema: bar.(name) (address) (neighborhood) (price) 
     # bar.(rating) (num_ratings) (latitude) (longitude)
     bars = Bar_MasterList.query.filter(Bar_MasterList.bar_id.in_(result_list)).all()
+    ratings = [int(bar.rating) * '★' for bar in bars]
+    prices = [int(bar.price) * '$' for bar in bars]
     #for bar in bars:
     #    print(bar)
 
-    return render_template('final_crawl.html', title='Your Bar Hop', bars=bars)
+    return render_template('final_crawl.html', title='Your Bar Hop', bars=bars, ratings=ratings, prices=prices)
 
 
 @app.route('/register', methods=['GET', 'POST'])

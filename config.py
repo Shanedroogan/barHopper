@@ -16,3 +16,7 @@ class Config(object):
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
     ADMINS = ['nybarhopper@gmail.com', 'shanedroogan@gmail.com']
+
+
+    #GOOGLE MAPS API KEY
+    GEO_KEY = os.environ.get('GEO_KEY')

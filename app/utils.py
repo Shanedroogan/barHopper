@@ -1,10 +1,28 @@
 from app import app, db
 from geopy.distance import geodesic
-from sqlalchemy import create_engine
 import pandas as pd
 from config import Config
 from app.models import Bar_MasterList
- 
+import requests
+import json
+
+
+def get_lat_and_lon(address):
+    GOOGLE_MAPS_API_URL = 'https://maps.googleapis.com/maps/api/geocode/json'
+    geo_key = app.config['GEO_KEY']
+    print(address)
+    params={
+        'address' : address, 
+        'key' : geo_key
+    }
+    
+    resp = requests.get(GOOGLE_MAPS_API_URL,params=params).json()['results'][0]
+    print(resp)
+        
+    #returns tuple with latitude and longitude
+    lat_and_lon = (resp['geometry']['location']['lat'], resp['geometry']['location']['lng'])
+        
+    return lat_and_lon
 
 # calculates the distance between the user and the bars 
 def distance(user_lat, user_long, bar_lat, bar_long):
