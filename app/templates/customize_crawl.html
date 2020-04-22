@@ -1,17 +1,26 @@
 {% extends "base.html" %}
 
 {% block app_content %}
-    <h1>Customize</h1>
-    <div class="row">
-        <div class="col-md-4">
-            <form method="POST">
-                {{ form.hidden_tag() }}
-                <div class="form-group">
-                    {{ form.address.label }}
-                    {{ form.address(size=20, class="form-control") }}
+<div class="row justify-content-center">
+    <div class="col-md-4">
+        <div class='card'>
+            <div class="text-center">
+                <h1>Customize</h1>
+            <div class="row justify-content-center">
+                <div class="col-md-4">
+                    <form method="POST">
+                        {{ form.hidden_tag() }}
+                        <div class="form-group">
+                            {{ form.address.label }}
+                            {{ form.address(size=20, class="form-control") }}
+                        </div>
+                        {{form.submit(class="btn btn-primary")}}
+                    </form>
                 </div>
-                {{form.submit(class="btn btn-primary")}}
-            </form>
+            </div>
+            </div>
         </div>
+        
     </div>
+</div>
 {% endblock %}

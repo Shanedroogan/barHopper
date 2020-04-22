@@ -1,14 +1,18 @@
 {% extends "base.html" %}
-
 {% block app_content %}
-<!--pages are sorted vertically with rows, and column classes limit the horizontal width
-This page currently has 1 row, and a column that's limited to 33% width-->
-    <div class="row">
-        <div class="col-md-4">
-            {% if current_user.is_authenticated %}
-            <h3>Hi, {{ current_user.username }}!</h3>
-            {% endif %}
-            <p class = "lead">Welcome to BarHopper.</p>
-        </div>
-    </div>
+
+<div class="text-center">
+
+<main role="main" class="inner cover" style= "color: aliceblue;">
+    <h1 class="display-1" style="margin-top:4rem">Welcome.</h1>
+    <small style="margin-top:-5%;">We're glad you made it.</small>
+    <p class="lead" style="padding-top:3.5%;">BarHopper is your NEW one stop shop for all things</p>
+    <h1 class="display-3">Bar Hops.</h1>
+    <h1 style="padding-top: 3%;">
+      <a href="{{ url_for('customize_crawl') }}" class="btn btn-lg btn-secondary shadow-sm">Let's get started!</a>
+    </h1>
+  </main>
+</div>
+</div>
+
 {% endblock %}

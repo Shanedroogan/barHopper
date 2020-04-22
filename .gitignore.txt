@@ -1,0 +1,8 @@
+# directories
+logs/
+venv/
+**/logs
+.vscode/
+
+#environmental variables
+*.env

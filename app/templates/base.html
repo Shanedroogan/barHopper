@@ -1,18 +1,21 @@
 <!doctype html>
 <html lang="en">
+
   <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='mystyle.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='/css/bootstrap.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='/css/mystyle.css')}}">
     <title>{% if title %}{{ title }} - BarHopper{% else %}Welcome to BarHopper!{% endif %}</title>
+    {% block head %}{% endblock %}
   </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
@@ -58,7 +61,7 @@
             {% endfor%}
         {% endif %}
         {% endwith %}
-    
+
         {# application content needs to be provided in the app_content block #}
         {% block app_content %}{% endblock %}
     </div>
@@ -67,7 +70,8 @@
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="{{ url_for('static', filename='bootstrap.js')}}"></script>
+    <script src="{{ url_for('static', filename='/scripts/bootstrap.js')}}"></script>
+    <script src="{{ url_for('static', filename='/scripts/mdb.js')}}"></script>
     {{ moment.include_moment() }}
     {{ moment.lang(g.locale) }}
 {% endblock %}

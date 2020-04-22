@@ -1,0 +1,24 @@
+.container > div {
+    padding-top : 50px;
+}
+
+#map {
+    width: 100%;
+    height: 400px;
+    background-color: grey;
+  }
+
+  /* Set a background image by replacing the URL below */
+body {
+    background: url('/static/images/btl-bg.jpg') no-repeat center center fixed;
+    background-color: dimgray;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+    -o-background-size: cover;
+    background-blend-mode: multiply;
+  }
+
+.navbar {
+    border-bottom: dimgray;
+}
