@@ -1,0 +1,9 @@
+# directories
+logs/
+venv/
+**/logs
+.vscode/
+__pycache__/
+
+#environmental variables
+*.env
