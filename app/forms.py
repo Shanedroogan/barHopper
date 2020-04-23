@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, DateTimeField, DecimalField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, DateField, DecimalField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
 from app.models import User
 from wtforms import TextAreaField
@@ -8,8 +8,8 @@ from datetime import datetime
 
 
 class CustomizePreferences(FlaskForm):
-    date_and_time = DateTimeField(default=datetime.now())
-    address = StringField('Location')
+    date = DateField(default=datetime.now(), validators=[DataRequired()])
+    address = StringField('Starting Address', validators=[DataRequired()])
     submit = SubmitField('Get Hoppin!')
 
 

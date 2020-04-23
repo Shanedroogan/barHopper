@@ -1,12 +1,16 @@
 {% extends "base.html" %}
 
 {% block app_content %}
-<div class="row align-items-end">
-    <div class="col-md-4">
-        {% if current_user.is_authenticated %}
-        <h3>Hi, {{ current_user.username }}!</h3>
-    {% endif %}
-    <p class = "lead">This is your user page.</p>
+<main style="color:aliceblue;">
+    <div class="row align-items-end" style="margin-top: 10%;">
+        <div class="col-md-4">
+            {% if current_user.is_authenticated %}
+            <h3>Hi, {{ current_user.username }}!</h3>
+        {% endif %}
+        <p class = "lead">This is your user page.</p>
+        <p style="padding-top: 5%;">This is where your previous trips will be stored, so you can revisit and share them!</p>
+        </div>
     </div>
-</div>
+</main>
+
 {% endblock %}
