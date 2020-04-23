@@ -1,7 +1,8 @@
 {% extends "base.html" %}
 
 {% block app_content %}
-<h1>Sign In</h1>
+<main style="color:aliceblue">
+    <h1>Sign In</h1>
 <form method="POST">
   {{ form.hidden_tag() }}
       <div class="form-group">
@@ -22,6 +23,8 @@
   <p>New User? <a href="{{ url_for('register') }}" class="btn btn-primary">Click to Register!</a></p>
   <p>
       Forgot Your Password?
-      <a href="{{ url_for('reset_password_request') }}" class="btn btn-primary">Click to Reset It</a>
+      <a href="{{ url_for('reset_password_request') }}" class="btn btn-secondary">Click to Reset It</a>
   </p>
+</main>
+
 {% endblock %}
