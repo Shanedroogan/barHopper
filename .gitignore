@@ -4,6 +4,6 @@ venv/
 **/logs
 .vscode/
 __pycache__/
-
+**/__pycache__
 #environmental variables
 *.env

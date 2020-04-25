@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, DateField, DecimalField
-from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, DecimalField
+from wtforms.fields.html5 import DateField
+from wtforms.validators import ValidationError, InputRequired, Email, EqualTo
 from app.models import User
 from wtforms import TextAreaField
 from wtforms.validators import Length
@@ -8,25 +9,25 @@ from datetime import datetime
 
 
 class CustomizePreferences(FlaskForm):
-    date = DateField(default=datetime.now(), validators=[DataRequired()])
-    address = StringField('Starting Address', validators=[DataRequired()])
+    date = DateField(default=datetime.now(), validators=[InputRequired()])
+    address = StringField('Starting Address', validators=[InputRequired()])
     submit = SubmitField('Get Hoppin!')
 
 
 class LoginForm(FlaskForm):
-    username = StringField('Username', validators = [DataRequired()])
-    password = PasswordField('Password', validators = [DataRequired()])
+    username = StringField('Username', validators = [InputRequired()])
+    password = PasswordField('Password', validators = [InputRequired()])
     remember_me = BooleanField('Remember Me')
     submit = SubmitField('Sign In')
 
 
 
 class RegistrationForm(FlaskForm):
-    username = StringField('Username', validators=[DataRequired()])
-    email = StringField('Email', validators=[DataRequired(), Email()])
-    password = PasswordField('Password', validators=[DataRequired()])
+    username = StringField('Username', validators=[InputRequired()])
+    email = StringField('Email', validators=[Email(message="Must be a valid email."), InputRequired(message="This field is required.")])
+    password = PasswordField('Password', validators=[InputRequired()])
     password2 = PasswordField(
-        'Repeat Password', validators=[DataRequired(), EqualTo('password')])
+        'Repeat Password', validators=[InputRequired(), EqualTo('password')])
     submit = SubmitField('Register')
 
     def validate_username(self, username):
@@ -41,11 +42,11 @@ class RegistrationForm(FlaskForm):
 
 
 class ResetPasswordForm(FlaskForm):
-    password = PasswordField('Password', validators=[DataRequired()])
+    password = PasswordField('Password', validators=[InputRequired()])
     password2 = PasswordField(
-        'Repeat Password', validators=[DataRequired(), EqualTo('password')])
+        'Repeat Password', validators=[InputRequired(), EqualTo('password')])
     submit = SubmitField('Request Password Reset')
 
 class ResetPasswordRequestForm(FlaskForm):
-    email = StringField('Email', validators=[DataRequired(), Email()])
+    email = StringField('Email', validators=[InputRequired(), Email()])
     submit = SubmitField('Request Password Reset')
