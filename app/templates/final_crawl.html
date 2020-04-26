@@ -1,70 +1,37 @@
 {% extends "base.html" %}
 
 {% block app_content %}
+<!--Back Button-->
 <div class="row" style = "margin-bottom: 0px; padding-bottom: 0px; margin-top:1.1rem">
   <div class="col-md-4">
     <a href ="{{ url_for('customize_crawl') }}" type = "button" class="btn btn-secondary"><i class="fas fa-angle-left"></i> Go Back</a>
   </div>
-</div>
+</div><!--End Back Button-->
+
 <div class = "row" style="margin-top: 0px; padding-top: 0px;">
+    <!--Bar Information-->
     <div class="col-md-6">
       <div class="accordion">
         {% for bar in bars %}
         <div class="card">
           <div class="row">
             <div class="col-3">
-              <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                <a class="nav-link active" id="v-pills-overview-tab" data-toggle="pill" href="#v-pills-overview{{loop.index0}}" role="tab" aria-controls="v-pills-overview{{loop.index0}}" aria-selected="true">Overview</a>
-                {% if bar.deals.count() > 0 %}
-                <a class="nav-link" id="v-pills-deals-tab" data-toggle="pill" href="#v-pills-deals{{loop.index0}}" role="tab" aria-controls="v-pills-deals{{loop.index0}}" aria-selected="false">Deals</a>
-                {% endif %}
-              </div>
+              {% include '_output_tab_content.html' %}
             </div>
             <div class="col-9">
-              <div class="tab-content" id="v-pills-tabContent">
-                <div class="tab-pane fade show active" id="v-pills-overview{{loop.index0}}" role="tabpanel" aria-labelledby="v-pills-overview-tab">
-                   <div class="row">
-                      <h4>{{ bar.name}}</h4>
-                   </div>
-                   <div class = "row">
-                      <small>{{ bar.address}}</small>
-                   </div>
-                   <div class = "row justify-content-between">
-                     <div class="col-md-4">
-                        Price: {{prices[loop.index0]}}
-                     </div>
-                     <div class="col-md-4">
-                        {{ratings[loop.index0]}}
-                    </div>
-                    <div class="col-md-4">
-                      <span class="badge badge-primary badge-pill">{{ bar.cat_title1}}</span>
-                    </div>
-                   </div>
-                </div>
-                {% if bar.deals.count() > 0 %}
-                <div class="tab-pane fade" id="v-pills-deals{{loop.index0}}" role="tabpanel" aria-labelledby="v-pills-deals-tab">
-                    <ul class="list-group">
-                      {% for deal in bar.deals %}
-                      <li class="list-group-item d-flex justify-content-between align-items-center">
-                          {{ deal.deal_name}}
-                      </li>
-                      {% endfor %}
-                    </ul>
-                </div>
-                {% endif %}
-              </div>
+              {% include '_output_tab_content.html' %}
             </div>
           </div>
         </div>
         {% endfor %}
       </div>
-    </div>
-    
+    </div><!--End Bar Information-->
+    <!--Interactive Map-->
     <div class = "col-md-6">
       <div id="map">
 
       </div>
-    </div>
+    </div><!--End Interactive Map-->
 </div>
 {% endblock %}
 
