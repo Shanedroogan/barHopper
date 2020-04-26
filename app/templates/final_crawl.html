@@ -1,22 +1,27 @@
 {% extends "base.html" %}
 
 {% block app_content %}
-<!--Back Button-->
+<!--Buttons-->
 <div class="row" style = "margin-bottom: 0px; padding-bottom: 0px; margin-top:1.1rem">
-  <div class="col-md-4">
-    <a href ="{{ url_for('customize_crawl') }}" type = "button" class="btn btn-secondary"><i class="fas fa-angle-left"></i> Go Back</a>
-  </div>
-</div><!--End Back Button-->
+    <!--Back Button-->
+    <div class="col-md-4">
+        <a href ="{{ url_for('customize_crawl') }}" type = "button" class="btn btn-secondary"><i class="fas fa-angle-left"></i> Go Back</a>
+    </div><!--End Back Button-->
+    <!--<div class="col-md-4">
+        <a href="{{ url_for('save', hop=request.args.get('result_list')) }}"></a>
+    </div>-->
+</div><!--End Buttons-->
 
 <div class = "row" style="margin-top: 0px; padding-top: 0px;">
     <!--Bar Information-->
     <div class="col-md-6">
       <div class="accordion">
         {% for bar in bars %}
+        {% set bar_index = loop.index0 %}
         <div class="card">
           <div class="row">
             <div class="col-3">
-              {% include '_output_tab_content.html' %}
+              {% include '_output_tab_nav.html' %}
             </div>
             <div class="col-9">
               {% include '_output_tab_content.html' %}
