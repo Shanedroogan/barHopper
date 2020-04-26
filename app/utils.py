@@ -9,11 +9,10 @@ import datetime
 
 def get_lat_and_lon(address):
     GOOGLE_MAPS_API_URL = 'https://maps.googleapis.com/maps/api/geocode/json'
-    geo_key = app.config['GEO_KEY']
-    print(address)
+
     params={
         'address' : address, 
-        'key' : geo_key
+        'key' : app.config['GEO_KEY']
     }
     
     resp = requests.get(GOOGLE_MAPS_API_URL,params=params).json()['results'][0]
