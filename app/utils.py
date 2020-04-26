@@ -4,6 +4,7 @@ import pandas as pd
 from app.models import Bar_MasterList
 import requests
 import json
+import datetime
 
 
 def get_lat_and_lon(address):
@@ -30,7 +31,7 @@ def distance(user_lat, user_long, bar_lat, bar_long):
     return round(geodesic(user_coordinates, bar_coordinates).miles, 1)
 
 
-def create_crawl(user_lat = 40.734198,user_long=-73.988325):
+def create_crawl(user_lat = 40.734198,user_long=-73.988325, date=datetime.date.today()):
 
     # the sql query used to acces the bar master list in the barhopper db
     #db.engine accesses the app context's connection

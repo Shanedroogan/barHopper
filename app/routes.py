@@ -23,9 +23,8 @@ def customize_crawl():
 
     if form.validate_on_submit():
         #create_crawl() fetches ordered list of bar ids
-        print(form.address.data)
         lat, lon = get_lat_and_lon(form.address.data)
-        result_list = create_crawl(user_lat = lat, user_long=lon)
+        result_list = create_crawl(user_lat = lat, user_long=lon, date=form.date.data)
         
         #join converts to comma separated values to pass as parameters
         result_list = ','.join(str(r) for r in result_list)
