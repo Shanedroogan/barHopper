@@ -4,12 +4,18 @@
 <!--Buttons-->
 <div class="row" style = "margin-bottom: 0px; padding-bottom: 0px; margin-top:1.1rem">
     <!--Back Button-->
-    <div class="col-md-4">
+    <div class="col-md-6">
         <a href ="{{ url_for('customize_crawl') }}" type = "button" class="btn btn-secondary"><i class="fas fa-angle-left"></i> Go Back</a>
     </div><!--End Back Button-->
-    <!--<div class="col-md-4">
-        <a href="{{ url_for('save', hop=request.args.get('result_list')) }}"></a>
-    </div>-->
+    <div class="col-md-4">
+      {% if not saved %}
+        <form action="" method="POST">
+            <input type="submit" name="save" class="btn btn-secondary" value="Save to Profile"/>
+        </form>
+      {% else %}
+        <button class= "btn btn-secondary" disabled>Saved <i class="fas fa-check"></i></button>
+      {% endif %}
+    </div>
 </div><!--End Buttons-->
 
 <div class = "row" style="margin-top: 0px; padding-top: 0px;">

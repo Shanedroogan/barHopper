@@ -60,10 +60,9 @@ class Crawl(db.Model):
     bar_5 = db.Column(db.Integer, db.ForeignKey('Bar_MasterList.bar_id'))
     timestamp = db.Column(db.DateTime, index = True, default = datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    language = db.Column(db.String(5))
 
     def __repr__(self):
-        return f'<Crawl {self.body}>'
+        return f'<Crawl {self.id}, {self.user_id}>'
 
 
 class Deal(db.Model):

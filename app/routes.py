@@ -7,7 +7,7 @@ from app.models import User, Crawl, Deal, Bar_MasterList
 from app.email import send_password_reset_email
 from werkzeug.urls import url_parse
 from datetime import datetime
-from app.utils import create_crawl, get_lat_and_lon
+from app.utils import create_crawl, get_lat_and_lon, toDate, check_if_saved
 import json
 
 
@@ -28,7 +28,7 @@ def customize_crawl():
         
         #join converts to comma separated values to pass as parameters
         result_list = ','.join(str(r) for r in result_list)
-        return redirect(url_for('output', result_list=result_list))
+        return redirect(url_for('output', result_list=result_list, date=form.date.data.strftime("%m-%d-%Y")))
         
     return render_template("customize_crawl.html", form=form, title='Customize')
 
@@ -47,10 +47,13 @@ def login():
             return redirect(url_for('login'))
 
         login_user(user, remember=form.remember_me.data)
-        next_page = request.args.get('next')
-        if not next_page or url_parse(next_page).netloc != '':
-            next_page = url_for('index')
-        return redirect(next_page)
+        if 'url' in session:
+            return redirect(session['url']) #Can we make this a post request so user doesn't have to click Save again?
+        else:
+            next_page = request.args.get('next')
+            if not next_page or url_parse(next_page).netloc != '':
+                next_page = url_for('index')
+            return redirect(next_page)
 
     return render_template('login.html', title='Sign In', form=form)
 
@@ -64,21 +67,38 @@ def logout():
 @app.route('/output', methods=['GET', 'POST'])
 def output():
     #receives list of bar ids from the customize page
-    result_list = [int(r) for r in request.args.get('result_list').split(',')]
+    params = request.args.get('result_list')
+    date = request.args.get('date', type=toDate)
+    result_list = [int(r) for r in params.split(',')]
+    
+    #Boolean value indicating whether user has saved this bar hop to profile
+    saved = False
+
+    if current_user.is_authenticated:
+        saved = check_if_saved(result_list, date)
+    
     
     #For Testing :
-    #result_list = [1866]
     # bar schema: bar.(name) (address) (neighborhood) (price) 
     # bar.(rating) (num_ratings) (latitude) (longitude)
     bars = Bar_MasterList.query.filter(Bar_MasterList.bar_id.in_(result_list)).all()
     ratings = [int(bar.rating) * '★' for bar in bars]
     prices = [int(bar.price) * '$' for bar in bars]
     maps_endpoint = f"https://maps.googleapis.com/maps/api/js?key={app.config['GEO_KEY']}&callback=initMap"
-    #for bar in bars:
-    #    print(bar)
+    
+    if request.method == "POST":
+        if not current_user.is_authenticated:
+            session['url'] = request.url
+            return redirect(url_for('login'))
+        session.pop('url', None)
+        crawl = Crawl(name='My Crawl', bar_1 = result_list[0], bar_2 = result_list[1], bar_3 = result_list[2],
+                    bar_4=result_list[3], bar_5 = result_list[4], timestamp=date, author=current_user)
+        db.session.add(crawl)
+        db.session.commit()
+        flash('Hop saved to profile!')
 
     return render_template('final_crawl.html', title='Your Bar Hop', bars=bars,
-                            ratings=ratings, prices=prices, maps_endpoint=maps_endpoint)
+                            ratings=ratings, prices=prices, maps_endpoint=maps_endpoint, saved=saved)
 
 
 @app.route('/register', methods=['GET', 'POST'])

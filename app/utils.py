@@ -1,11 +1,20 @@
 from app import app, db
 from geopy.distance import geodesic
 import pandas as pd
-from app.models import Bar_MasterList
+from app.models import Bar_MasterList, Crawl, User
 import requests
 import json
 import datetime
+from flask_login import current_user
 
+
+def check_if_saved(result_list, date):
+    crawl = Crawl.query.filter_by(bar_1 = result_list[0], bar_2 = result_list[1], bar_3 = result_list[2],
+                    bar_4=result_list[3], bar_5 = result_list[4], timestamp=date, author=current_user).first()
+    if crawl is not None:
+        return True
+    else:
+        return False
 
 def get_lat_and_lon(address):
     GOOGLE_MAPS_API_URL = 'https://maps.googleapis.com/maps/api/geocode/json'
@@ -69,4 +78,6 @@ def create_crawl(user_lat = 40.734198,user_long=-73.988325, date=datetime.date.t
         #drop bar from df
         df.drop([int(df[:1].index.values)],inplace = True) 
     return return_list
-    
+
+def toDate(dateString): 
+    return datetime.datetime.strptime(dateString, "%m-%d-%Y").date()
