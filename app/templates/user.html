@@ -11,6 +11,15 @@
         <p style="padding-top: 5%;">This is where your previous trips will be stored, so you can revisit and share them!</p>
         </div>
     </div>
+    {% for crawl in crawls%}
+    {% set bar_index = loop.index0 %}
+    <ul class="list-group list-group-horizontal-lg">
+        <li class="list-group-item" id="crawl-info"><img class="rounded" src="https://maps.googleapis.com/maps/api/staticmap?path=enc:{{crawl.polyline_string}}&key=AIzaSyD_tBBrrwx7ZZygllgkkgPtpSEGw5C9ot0&size=126x126&style=feature:poi|visibility:off&style=invert_lightness:true" alt=""></li>
+        <li class="list-group-item" id="crawl-info">{{crawl.timestamp}}</li>
+        <li class="list-group-item" id="crawl-info"></li>
+      </ul>
+    {% endfor %}
+    </div>
 </main>
 
 {% endblock %}

@@ -86,7 +86,7 @@ def output():
     prices = [int(bar.price) * '$' for bar in bars]
     maps_endpoint = f"https://maps.googleapis.com/maps/api/js?key={app.config['GEO_KEY']}&callback=initMap"
     #print(current_user)
-    
+
     if request.method == "POST":
         if not current_user.is_authenticated:
             session['url'] = request.url
@@ -171,5 +171,5 @@ def user(username):
     prev_url = url_for('user', username=user.username, page=crawls.prev_num) \
         if crawls.has_next else None
 
-    return render_template('user.html', user=user, title='Your Hops', crawls=crawl_list,
+    return render_template('user.html', user=user, title='Your Hops', crawls=crawls.items,
                             next_url=next_url, prev_url=prev_url)

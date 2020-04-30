@@ -7,7 +7,7 @@ class Config(object):
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-    POSTS_PER_PAGE = 25
+    POSTS_PER_PAGE = 3
 
     #MAIL SERVER INFO
     MAIL_SERVER = os.environ.get('MAIL_SERVER')
