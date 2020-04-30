@@ -8,9 +8,9 @@ import datetime
 from flask_login import current_user
 
 
-def check_if_saved(result_list, date):
+def check_if_saved(result_list):
     crawl = Crawl.query.filter_by(bar_1 = result_list[0], bar_2 = result_list[1], bar_3 = result_list[2],
-                    bar_4=result_list[3], bar_5 = result_list[4], timestamp=date, author=current_user).first()
+                    bar_4=result_list[3], bar_5 = result_list[4], author=current_user).first()
     if crawl is not None:
         return True
     else:
@@ -55,7 +55,10 @@ def create_crawl(user_lat = 40.734198,user_long=-73.988325, date=datetime.date.t
     #save user_lat,user_long to temp values, which will be changed since distance is calculated relative to last location
     temp_long = user_long
     temp_lat = user_lat
-    
+     # date numeric to weekday converter (dict)
+    date_dict = {1:"Monday", 2:"Tuesday", 3:"Wednesday", 4:"Thursday", 5:"Friday", 6:"Saturday", 7:"Sunday"}
+    # extracts the day of week using date time object created and the date dictionary
+    day_of_week = date_dict[date.isoweekday()]
     #top 5, so run loop until return_list length is 5
     while len(return_list) < 5:
         
@@ -63,7 +66,7 @@ def create_crawl(user_lat = 40.734198,user_long=-73.988325, date=datetime.date.t
         df['distance'] = df.apply(lambda x: distance(temp_lat, temp_long, x['latitude'], x['longitude']), axis = 1)
         
         #score function
-        df['score'] = ((4-df['price'])/4 + df['rating']/5 - df['distance'])/3
+        df['score'] = ((4-df['price'])/4 + df['rating']/5 - df['distance'] + df[day_of_week])/4
 
         #sort values, take top value 
         df.sort_values(by = ['score'],ascending = False, inplace = True)
@@ -76,7 +79,7 @@ def create_crawl(user_lat = 40.734198,user_long=-73.988325, date=datetime.date.t
         temp_lat = df.loc[int(df[:1].index.values), 'latitude'] 
         
         #drop bar from df
-        df.drop([int(df[:1].index.values)],inplace = True) 
+        df.drop([int(df[:1].index.values)],inplace = True)
     return return_list
 
 def toDate(dateString): 
