@@ -23,3 +23,8 @@ body {
 .navbar {
     border-bottom: dimgray;
 }
+
+#crawl-info {
+  background-color: rgb(226, 148, 84);
+  color : aliceblue;  
+}

@@ -53,11 +53,8 @@ class Crawl(db.Model):
     __table_args__ = {'extend_existing' : True}
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(140))
-    bar_1 = db.Column(db.Integer, db.ForeignKey('Bar_MasterList.bar_id'))
-    bar_2 = db.Column(db.Integer, db.ForeignKey('Bar_MasterList.bar_id'))
-    bar_3 = db.Column(db.Integer, db.ForeignKey('Bar_MasterList.bar_id'))
-    bar_4 = db.Column(db.Integer, db.ForeignKey('Bar_MasterList.bar_id'))
-    bar_5 = db.Column(db.Integer, db.ForeignKey('Bar_MasterList.bar_id'))
+    bar_list = db.Column(db.String(140))
+    polyline_string = db.Column(db.String(255))
     timestamp = db.Column(db.DateTime, index = True, default = datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 

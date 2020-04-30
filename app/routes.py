@@ -9,6 +9,7 @@ from werkzeug.urls import url_parse
 from datetime import datetime
 from app.utils import create_crawl, get_lat_and_lon, toDate, check_if_saved
 import json
+import ast
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -68,14 +69,13 @@ def logout():
 def output():
     #receives list of bar ids from the customize page
     params = request.args.get('result_list')
-    date = request.args.get('date', type=toDate)
     result_list = [int(r) for r in params.split(',')]
     
     #Boolean value indicating whether user has saved this bar hop to profile
     saved = False
 
     if current_user.is_authenticated:
-        saved = check_if_saved(result_list, date)
+        saved = check_if_saved(result_list)
     
     
     #For Testing :
@@ -85,17 +85,19 @@ def output():
     ratings = [int(bar.rating) * '★' for bar in bars]
     prices = [int(bar.price) * '$' for bar in bars]
     maps_endpoint = f"https://maps.googleapis.com/maps/api/js?key={app.config['GEO_KEY']}&callback=initMap"
+    #print(current_user)
     
     if request.method == "POST":
         if not current_user.is_authenticated:
             session['url'] = request.url
             return redirect(url_for('login'))
         session.pop('url', None)
-        crawl = Crawl(name='My Crawl', bar_1 = result_list[0], bar_2 = result_list[1], bar_3 = result_list[2],
-                    bar_4=result_list[3], bar_5 = result_list[4], timestamp=date, author=current_user)
+        polyline = request.get_json()['polyline']
+        crawl = Crawl(name='My Crawl', bar_list=str(result_list), author=current_user, polyline_string=polyline)
+        
         db.session.add(crawl)
         db.session.commit()
-        flash('Hop saved to profile!')
+        
 
     return render_template('final_crawl.html', title='Your Bar Hop', bars=bars,
                             ratings=ratings, prices=prices, maps_endpoint=maps_endpoint, saved=saved)
@@ -158,10 +160,16 @@ def user(username):
     page = request.args.get('page', 1, type=int)
     crawls = user.crawls.order_by(Crawl.timestamp.desc()).paginate(
         page, app.config['POSTS_PER_PAGE'], False)
+    
+    crawl_list = []
+
+    for crawl in crawls.items:
+        crawl_list.append(Bar_MasterList.query.filter(Bar_MasterList.bar_id.in_(ast.literal_eval(crawl.bar_list))).all())
+    
     next_url = url_for('user', username=user.username, page=crawls.next_num) \
         if crawls.has_next else None
     prev_url = url_for('user', username=user.username, page=crawls.prev_num) \
         if crawls.has_next else None
 
-    return render_template('user.html', user=user, title='Your Hops', crawls=crawls.items,
+    return render_template('user.html', user=user, title='Your Hops', crawls=crawl_list,
                             next_url=next_url, prev_url=prev_url)

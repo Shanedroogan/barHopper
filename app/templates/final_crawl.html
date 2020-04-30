@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block app_content %}
+<div id="alert"></div>
 <!--Buttons-->
 <div class="row" style = "margin-bottom: 0px; padding-bottom: 0px; margin-top:1.1rem">
     <!--Back Button-->
@@ -9,8 +10,8 @@
     </div><!--End Back Button-->
     <div class="col-md-4">
       {% if not saved %}
-        <form action="" method="POST">
-            <input type="submit" name="save" class="btn btn-secondary" value="Save to Profile"/>
+        <form action="">
+            <input type="button" id = "submit" name="save" class="btn btn-secondary" value="Save to Profile"/>
         </form>
       {% else %}
         <button class= "btn btn-secondary" disabled>Saved <i class="fas fa-check"></i></button>
@@ -48,7 +49,9 @@
 
 {% block scripts %}
 {{super()}}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script>
+  var polyline = ""
   // Initialize and add the map
   function initMap() {
     //Init directions service
@@ -91,9 +94,23 @@
   directionsService.route(request, function(result, status) {
     if (status == 'OK') {
       directionsRenderer.setDirections(result);
+      polyline = result.routes[0].overview_polyline
     }
   });
 }
+$('#submit').click(function() {
+        console.log(polyline);
+        $.ajax({
+          type: "POST",
+          contentType: "application/json;charset=utf-8",
+          url: "{{ url_for('output', result_list=request.args.get('result_list')) }}",
+          traditional: "true",
+          data: JSON.stringify({polyline}),
+          dataType: "json"
+          });
+          this.value = "Saved!"
+          $(this).prop('disabled', true);
+    });
   </script>
       <script async defer
       src='{{ maps_endpoint }}'>

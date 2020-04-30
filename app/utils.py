@@ -9,8 +9,7 @@ from flask_login import current_user
 
 
 def check_if_saved(result_list):
-    crawl = Crawl.query.filter_by(bar_1 = result_list[0], bar_2 = result_list[1], bar_3 = result_list[2],
-                    bar_4=result_list[3], bar_5 = result_list[4], author=current_user).first()
+    crawl = Crawl.query.filter_by(bar_list=str(result_list), author=current_user).first()
     if crawl is not None:
         return True
     else:
