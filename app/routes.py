@@ -22,16 +22,26 @@ def index():
 def customize_crawl():
     form = CustomizePreferences()
 
+    maps_endpoint = f"https://maps.googleapis.com/maps/api/js?key={app.config['GEO_KEY']}&callback=initMap"
+    """
     if form.validate_on_submit():
         #create_crawl() fetches ordered list of bar ids
         lat, lon = get_lat_and_lon(form.address.data)
         result_list = create_crawl(user_lat = lat, user_long=lon, date=form.date.data)
-        
+        print(request.get_json())
         #join converts to comma separated values to pass as parameters
         result_list = ','.join(str(r) for r in result_list)
-        return redirect(url_for('output', result_list=result_list, date=form.date.data.strftime("%m-%d-%Y")))
+        return redirect(url_for('output', result_list=result_list, date=form.date.data.strftime("%Y-%m-%d")))
+    """
+    if request.method == "POST":
+        date = request.get_json()['form_data'][5:]
+        print(date)
+        lat, lng = request.get_json()['FinalLatLng']['lat'], request.get_json()['FinalLatLng']['lng']
+        result_list = create_crawl(user_lat=lat, user_long=lng, date=datetime.strptime(date, '%Y-%m-%d'))
+        result_list = ','.join(str(r) for r in result_list)
+        return jsonify(result_list=result_list, date=date)
         
-    return render_template("customize_crawl.html", form=form, title='Customize')
+    return render_template("customize_crawl.html", form=form, title='Customize', maps_endpoint=maps_endpoint)
 
 @app.route('/login', methods = ['GET', 'POST'])
 def login():
@@ -85,7 +95,6 @@ def output():
     ratings = [int(bar.rating) * '★' for bar in bars]
     prices = [int(bar.price) * '$' for bar in bars]
     maps_endpoint = f"https://maps.googleapis.com/maps/api/js?key={app.config['GEO_KEY']}&callback=initMap"
-    #print(current_user)
 
     if request.method == "POST":
         if not current_user.is_authenticated:

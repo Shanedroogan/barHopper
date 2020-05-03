@@ -24,7 +24,6 @@ def get_lat_and_lon(address):
     }
     
     resp = requests.get(GOOGLE_MAPS_API_URL,params=params).json()['results'][0]
-    print(resp)
         
     #returns tuple with latitude and longitude
     lat_and_lon = (resp['geometry']['location']['lat'], resp['geometry']['location']['lng'])

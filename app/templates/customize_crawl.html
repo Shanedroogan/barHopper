@@ -2,24 +2,384 @@
 
 {% block app_content %}
 <main role="main" style= "color: aliceblue;">
-    <div class="text-center">
-        <h1 class = "display-4" style="padding-top: 15%;">Customize Your Hop</h1>
-    <div class="row justify-content-center">
+    <div class="text-center" style="margin-bottom: 20px;">
+        <h1 class = "display-4" style="padding-top: 8%;">Customize Your Hop</h1>
+        <small class="lead"> Select on the map where you want to bar hop.</small>
+    <div class="row justify-content-center" style="margin-top: 5%;">
+        <div class="col-md-6">
+            <div id="map"></div>
+        </div>
         <div class="col-md-4">
-            <form method="POST">
-                {{form.hidden_tag()}}
-                <div class="form-group">
-                    {{ form.date.label }}
-                    {{ form.date(size=20, class="form-control") }}
-                </div>
-                <div class="form-group">
-                    {{ form.address.label }}
-                    {{ form.address(size=20, class="form-control", placeholder="Starting address") }}
-                </div>
-                {{form.submit(class="btn btn-secondary")}}
+            <form id="submitMap" method="POST">
+                <input type="date" name="date" size = 20 class="form-control" id = "theDate">
+                <div style="margin:10%"></div>
+                <input type="submit" name="submit" id="submitButton" class="btn btn-lg btn-secondary" value="Get Hoppin!"/>
+            </form>
+            <div>
+                <p class="display-4" style="margin:10%">Or</p>
+            </div>
+            <form action="" method="GET">
+                <input type="button" value="Find a Random Hop!" class="btn btn-lg btn-primary">
             </form>
         </div>
     </div>
     </div>
 </main>
+{% endblock %}
+
+{% block scripts%}
+{{super()}}
+<!--Source for AJAX submitting-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>
+    //FinalLatLng stores the latitude and longitude that is fed into the barhopper algorithm (tm)
+    var FinalLatLng = {lat: 40.75310, lng: -73.9812};
+
+    function initMap() {
+	    var latLng = {lat: 40.75310, lng: -73.9812};
+  
+        var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 12,
+            center: {lat: 40.75310, lng: -73.9812},
+            styles: [
+  {
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#242f3e"
+      }
+    ]
+  },
+  {
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#746855"
+      }
+    ]
+  },
+  {
+    "elementType": "labels.text.stroke",
+    "stylers": [
+      {
+        "color": "#242f3e"
+      }
+    ]
+  },
+  {
+    "featureType": "administrative.land_parcel",
+    "elementType": "labels",
+    "stylers": [
+      {
+        "visibility": "off"
+      }
+    ]
+  },
+  {
+    "featureType": "administrative.locality",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#d59563"
+      }
+    ]
+  },
+  {
+    "featureType": "poi",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#d59563"
+      }
+    ]
+  },
+  {
+    "featureType": "poi.attraction",
+    "stylers": [
+      {
+        "visibility": "off"
+      }
+    ]
+  },
+  {
+    "featureType": "poi.business",
+    "stylers": [
+      {
+        "visibility": "off"
+      }
+    ]
+  },
+  {
+    "featureType": "poi.government",
+    "stylers": [
+      {
+        "visibility": "off"
+      }
+    ]
+  },
+  {
+    "featureType": "poi.medical",
+    "stylers": [
+      {
+        "visibility": "off"
+      }
+    ]
+  },
+  {
+    "featureType": "poi.park",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#263c3f"
+      }
+    ]
+  },
+  {
+    "featureType": "poi.park",
+    "elementType": "labels.text",
+    "stylers": [
+      {
+        "visibility": "off"
+      }
+    ]
+  },
+  {
+    "featureType": "poi.park",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#6b9a76"
+      }
+    ]
+  },
+  {
+    "featureType": "poi.place_of_worship",
+    "stylers": [
+      {
+        "visibility": "off"
+      }
+    ]
+  },
+  {
+    "featureType": "poi.school",
+    "stylers": [
+      {
+        "visibility": "off"
+      }
+    ]
+  },
+  {
+    "featureType": "poi.sports_complex",
+    "stylers": [
+      {
+        "visibility": "off"
+      }
+    ]
+  },
+  {
+    "featureType": "road",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#38414e"
+      }
+    ]
+  },
+  {
+    "featureType": "road",
+    "elementType": "geometry.stroke",
+    "stylers": [
+      {
+        "color": "#212a37"
+      }
+    ]
+  },
+  {
+    "featureType": "road",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#9ca5b3"
+      }
+    ]
+  },
+  {
+    "featureType": "road.arterial",
+    "stylers": [
+      {
+        "visibility": "on"
+      }
+    ]
+  },
+  {
+    "featureType": "road.highway",
+    "stylers": [
+      {
+        "visibility": "off"
+      }
+    ]
+  },
+  {
+    "featureType": "road.highway",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#746855"
+      }
+    ]
+  },
+  {
+    "featureType": "road.highway",
+    "elementType": "geometry.stroke",
+    "stylers": [
+      {
+        "color": "#1f2835"
+      }
+    ]
+  },
+  {
+    "featureType": "road.highway",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#f3d19c"
+      }
+    ]
+  },
+  {
+    "featureType": "road.highway.controlled_access",
+    "stylers": [
+      {
+        "visibility": "off"
+      }
+    ]
+  },
+  {
+    "featureType": "road.local",
+    "stylers": [
+      {
+        "visibility": "on"
+      }
+    ]
+  },
+  {
+    "featureType": "transit",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#2f3948"
+      }
+    ]
+  },
+  {
+    "featureType": "transit.station",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#d59563"
+      }
+    ]
+  },
+  {
+    "featureType": "transit.station.rail",
+    "stylers": [
+      {
+        "visibility": "simplified"
+      }
+    ]
+  },
+  {
+    "featureType": "water",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#17263c"
+      }
+    ]
+  },
+  {
+    "featureType": "water",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#515c6d"
+      }
+    ]
+  },
+  {
+    "featureType": "water",
+    "elementType": "labels.text.stroke",
+    "stylers": [
+      {
+        "color": "#17263c"
+      }
+    ]
+  }
+]
+        });
+    
+    var marker = new google.maps.Marker({
+        position: latLng,
+        map: map,
+        draggable:true,
+        title:"Drag me!",
+        map:map
+    });
+    //Adds event listener to the marker
+    markerCoords(marker);
+}
+
+//Updates variable with marker coordinates, and adjusts viewport for the user
+function markerCoords(markerobject){
+    google.maps.event.addListener(markerobject, 'dragend', function(evt){
+            FinalLatLng = evt.latLng;
+            markerobject.get('map').zoom = 16;
+            markerobject.get('map').panTo(evt.latLng);
+    });
+
+    google.maps.event.addListener(markerobject, 'drag', function(evt){
+        console.log("marker is being dragged");
+    });     
+}
+
+$('#submitMap').submit(function() {
+        event.preventDefault(); //prevent default action
+        $('#submitButton').attr('value', 'Loading...'); //Replaces button text with 'Loading...'
+        var form_data = $(this).serialize(); //Encode form elements for submission
+        //Using AJAX to submit form data allows us to access the marker's position on the map
+        
+        $.ajax({
+          type: "POST",
+          contentType: "application/json;charset=utf-8",
+          url: "{{ url_for('customize_crawl') }}",
+          traditional: "true",
+          data: JSON.stringify({FinalLatLng, form_data}),
+          dataType: "json",
+          }).done(function(response) { //server sends JSON response containing output of the barhopper algorithm (tm)
+              document.location.href="/output?result_list="+response['result_list']+"&date="+response['date'];
+          });
+          $(this).prop('disabled', true);
+    });
+
+</script>
+<!--Needed for google maps API to submit asynchronous calls-->
+<script async defer
+    src='{{ maps_endpoint }}'>
+</script>
+<script>
+    //Populates date form with today's date
+    $(document).ready(function() {
+    var date = new Date();
+
+    var day = date.getDate();
+    var month = date.getMonth() + 1;
+    var year = date.getFullYear();
+
+    if (month < 10) month = "0" + month;
+    if (day < 10) day = "0" + day;
+
+    var today = year + "-" + month + "-" + day;       
+    $("#theDate").attr("value", today);
+});
+</script>
 {% endblock %}
