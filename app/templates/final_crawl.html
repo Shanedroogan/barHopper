@@ -9,13 +9,19 @@
         <a href ="{{ url_for('customize_crawl') }}" type = "button" class="btn btn-secondary"><i class="fas fa-angle-left"></i> Go Back</a>
     </div><!--End Back Button-->
     <div class="col-md-6">
-      {% if not saved %}
+      {% if not saved and current_user.is_authenticated %}
       <!-- Button below toggles the save to profile form -->
         <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#saveModal">
             Save to Profile
         </button>
+        
         <!-- Inherit save to profile form to simplify div organization -->
         {% include '_save_to_profile.html' %}
+
+      {% elif not current_user.is_authenticated %}
+      <!-- If user is not logged in and tries to save, this popover will direct them to the login page so that they can -->
+      <a href="#" role="button" class="btn btn-secondary" data-placement="top" data-toggle="popover" title="" data-content="You must be logged in to save your hop. <a href='{{url_for('login')}}'>Click here to login</a>">Save to Profile</a>
+      
       {% else %}
         <button class= "btn btn-secondary" disabled>Saved <i class="fas fa-check"></i></button>
       {% endif %}
@@ -55,6 +61,10 @@
 
 {% block scripts %}
 {{super()}}
+<script>
+$("[data-toggle=popover]")
+  .popover({html:true})
+</script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script>
   var polyline = ""
