@@ -9,6 +9,7 @@ from flask_login import current_user
 
 
 def check_if_saved(result_list):
+    #Checks if user has bar hop with matching features
     crawl = Crawl.query.filter_by(bar_list=str(result_list), author=current_user).first()
     if crawl is not None:
         return True
@@ -80,5 +81,6 @@ def create_crawl(user_lat = 40.734198,user_long=-73.988325, date=datetime.date.t
         df.drop([int(df[:1].index.values)],inplace = True)
     return return_list
 
-def toDate(dateString): 
+def toDate(dateString):
+    #returns date as string for url
     return datetime.datetime.strptime(dateString, "%m-%d-%Y").date()

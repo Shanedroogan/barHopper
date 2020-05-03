@@ -1,3 +1,8 @@
+<!-- 
+    We use Jinja2 inheritance to simplifying styling across pages
+    Each page inherits from this base class, containing css and javascript links, as well as a custom nav bar 
+ -->
+
 <!doctype html>
 <html lang="en">
 
@@ -14,12 +19,19 @@
 
     <!--Our stylesheet-->
     <link rel="stylesheet" href="{{ url_for('static', filename='/css/mystyle.css')}}">
+
+    <!-- Display branded title on browser tab -->
     <title>{% if title %}{{ title }} - BarHopper{% else %}Welcome to BarHopper!{% endif %}</title>
+
+    <!-- head block added if individual page needs custom head elements -->
     {% block head %}{% endblock %}
   </head>
 
 <body>
-    
+    <!-- Nav bar on every page -->
+    <!-- Bootstrap flex box used for compatibility with mobile browsers -->
+    <!-- Navbar contains links to Index page, Customize page, and links 
+         depending on the authentication of current user -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
             <ul class="navbar-nav mr-auto">
@@ -38,13 +50,13 @@
             </button>
         </div>
         <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
-            {% if current_user.is_anonymous %}
+            {% if current_user.is_anonymous %} <!-- If user is anonymous, provide link to login page -->
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url_for('login') }}">Login</a>
                 </li>
             </ul>
-            {% else %}
+            {% else %} <!-- if user is logged in, provide links to user page and logout endpoint-->
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url_for('user', username=current_user.username) }}">My Crawls</a>
@@ -57,8 +69,9 @@
         </div>
     </nav>
     
-
+    <!-- All bootstrap elements need to be in .container element, so we take care of that here-->
     <div class="container">
+        <!-- if messages queued, flash them to user-->
         {% with messages = get_flashed_messages() %}
         {% if messages %}
             {% for message in messages %}
@@ -70,13 +83,20 @@
         {# application content needs to be provided in the app_content block #}
         {% block app_content %}{% endblock %}
     </div>
+<!-- scripts block used to load javascript for dynamic functionality -->
 {% block scripts%}
-    <!-- Optional JavaScript -->
+    <!-- Optional Bootstrap JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <!-- jQuery allows traversal of DOM  -->
+    <!-- Popper allows placement of popover elements on page -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="{{ url_for('static', filename='/scripts/bootstrap.js')}}"></script>
+
+    <!-- Dynamic loading of custom icons from fontawesome -->
     <script src="https://kit.fontawesome.com/f8b2223942.js" crossorigin="anonymous"></script>
+
+    <!-- inherit moment library functionality for time localization of timestamps on user page-->
     {{ moment.include_moment() }}
     {{ moment.lang(g.locale) }}
 {% endblock %}

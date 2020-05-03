@@ -1,0 +1,19 @@
+<!-- .modal from bootstrap provides a clean form input overlay over the page, aria-controls used to toggle visibility -->
+<div class="modal fade" id="saveModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Give your Hop a name.</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Cancel">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form action="" id="saveHop" method="POST">
+            <input type="text" name="name" id="hopName" class="form-control">
+            <input type="submit" id = "submit" name="save" class="btn btn-secondary" value="Save to Profile" style="margin-top: 5px;"/>
+          </form>
+        </div>
+      </div>
+    </div>
+</div>

@@ -8,47 +8,35 @@
     <div class="col-md-6">
         <a href ="{{ url_for('customize_crawl') }}" type = "button" class="btn btn-secondary"><i class="fas fa-angle-left"></i> Go Back</a>
     </div><!--End Back Button-->
-    <div class="col-md-4">
+    <div class="col-md-6">
       {% if not saved %}
+      <!-- Button below toggles the save to profile form -->
         <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#saveModal">
             Save to Profile
         </button>
-        <div class="modal fade" id="saveModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="staticBackdropLabel">Give your Hop a name.</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Cancel">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="modal-body">
-                  <form action="" id="saveHop" method="POST">
-                    <input type="text" name="name" id="hopName">
-                    <input type="submit" id = "submit" name="save" class="btn btn-secondary" value="Save to Profile"/>
-                  </form>
-                </div>
-              </div>
-            </div>
-        </div>
+        <!-- Inherit save to profile form to simplify div organization -->
+        {% include '_save_to_profile.html' %}
       {% else %}
         <button class= "btn btn-secondary" disabled>Saved <i class="fas fa-check"></i></button>
       {% endif %}
     </div>
 </div><!--End Buttons-->
 
-<div class = "row" style="margin-top: 0px; padding-top: 0px;">
+<div class = "row" style="margin-top: 20px; padding-top: 0px;">
     <!--Bar Information-->
     <div class="col-md-6">
       <div class="accordion">
         {% for bar in bars %}
+        <!-- The expression below allows jinja included html to access loop position -->
         {% set bar_index = loop.index0 %}
         <div class="card">
           <div class="row">
             <div class="col-3">
+              <!-- Inherit card html to simplify div organization -->
               {% include '_output_tab_nav.html' %}
             </div>
             <div class="col-9">
+              <!-- Inherit card html to simplify div organization -->
               {% include '_output_tab_content.html' %}
             </div>
           </div>
@@ -72,11 +60,13 @@
   var polyline = ""
   // Initialize and add the map
   function initMap() {
-    //Init directions service
+    //Init directions service to establish route
     directionsService = new google.maps.DirectionsService();
+    // directionsRenderer populates map with visual of route
     directionsRenderer = new google.maps.DirectionsRenderer();
-    // The location of the bar hop
+    // The location of the bar hop - map center on the second of five bars
     var hop = {lat: parseFloat('{{bars[2].latitude|safe}}'), lng: parseFloat('{{bars[2].longitude|safe}}')};
+    //mapOptions contains styling and UI parameters
     var mapOptions = {
       zoom : 14,
       center : hop,
@@ -368,9 +358,12 @@
         document.getElementById('map'), mapOptions);
         directionsRenderer.setMap(map)
   }
+
+  //Function calculates route based with waypoints at the various bars
   function calcRoute() {
   var start = '{{bars[0].address}}';
   var end = '{{bars[0].address}}';
+  //request object contains necessary parameters for generating route
   var request = {
     origin: start,
     destination: end,
@@ -388,9 +381,13 @@
         },{
           location: '{{bars[4].address|safe}}',
           stopover : true
-        }]//,
-        //optimizeWaypoints : true
+        }],
+        // optimize waypoints supplants our barhopper algorithm (tm) ordering, but 
+        // generally results in more coherent shape for bar hop route 
+        optimizeWaypoints : true
   };
+
+  //Renders the directions, and saves the polyline to a global variable for submission
   directionsService.route(request, function(result, status) {
     if (status == 'OK') {
       directionsRenderer.setDirections(result);
@@ -399,6 +396,7 @@
   });
 }
 
+//AJAX submission allows us to send Javascript variable to the server
 $('#saveHop').submit(function() {
         event.preventDefault(); //prevent double submit
         var form_data = $(this).serialize(); //get name of bar hop
@@ -417,10 +415,12 @@ $('#saveHop').submit(function() {
           //$(this).prop('disabled', true);
     });
 </script>
-      <script async defer
-      src='{{ maps_endpoint }}'>
-      </script>
-      <script>
-        window.onload = calcRoute
-      </script>
+<!-- Needed script for map initialization -->
+<script async defer
+  src='{{ maps_endpoint }}'>
+</script>
+<script>
+  //calculate route once page has loaded
+  window.onload = calcRoute
+</script>
 {% endblock %}

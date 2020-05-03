@@ -1,10 +1,13 @@
 {% extends "base.html" %}
-
+<!--
+    500 Internal Server Error error handling
+    Redirect to home page
+-->
 {% block app_content %}
-    <div class="row">
+    <div class="row" style="color:aliceblue;">
         <div class = "col-md-4">
-            <h1>An unexpected error has occured.</h1>
-            <p>Pour one out for the admin who has to fix this.</p>
+            <h1 class="display-1">An unexpected error has occured.</h1>
+            <p class="lead">Pour one out for the admin who has to fix this.</p>
             <p><a href="{{ url_for('index') }}">Go Home</a></p>
         </div>
     </div>

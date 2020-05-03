@@ -1,3 +1,7 @@
+<!--Bootstrap card styling split to simplify organization of divs-->
+<!--This html populates the navigation section of each card-->
+<!-- aria-controls used to hide/display content based on _output_tab_content.html -->
+<!-- bar_index inherited from final_crawl.html, used to make unique ids for elements -->
 <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
     <a class="nav-link active" id="v-pills-overview-tab" data-toggle="pill" href="#v-pills-overview{{bar_index}}" role="tab" aria-controls="v-pills-overview{{bar_index}}" aria-selected="true">Overview</a>
     {% if bar.deals.count() > 0 %}

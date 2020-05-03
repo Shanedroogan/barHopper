@@ -1,6 +1,8 @@
 from flask import render_template
 from app import app, db
 
+#Handles errors to hide debug info from users
+
 @app.errorhandler(404)
 def page_not_found(error):
     return render_template('404.html'), 404

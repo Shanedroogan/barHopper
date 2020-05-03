@@ -1,3 +1,7 @@
+<!--Bootstrap card styling split to simplify organization of divs-->
+<!--This html populates the content section of each card-->
+<!-- aria-controls used to hide/display based on nav components in _output_tab_nav.html -->
+<!-- bar_index inherited from final_crawl.html -->
 <div class="tab-content" id="v-pills-tabContent">
     <div class="tab-pane fade show active" id="v-pills-overview{{bar_index}}" role="tabpanel" aria-labelledby="v-pills-overview-tab">
        <div class="row">
@@ -18,7 +22,7 @@
         </div>
        </div>
     </div>
-    {% if bar.deals.count() > 0 %}
+    {% if bar.deals.count() > 0 %} <!-- Only populate deal tab if deals exist in db -->
     <div class="tab-pane fade" id="v-pills-deals{{bar_index}}" role="tabpanel" aria-labelledby="v-pills-deals-tab">
         <ul class="list-group">
           {% for deal in bar.deals %}

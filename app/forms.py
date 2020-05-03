@@ -7,6 +7,10 @@ from wtforms import TextAreaField
 from wtforms.validators import Length
 from datetime import datetime
 
+# WTForms allows us to use easy to implement server-side form validation
+# Each variable in class declaration pertains to a unique field or submit button in form
+# validator assignment allows us to put restrictions on user input
+
 
 class CustomizePreferences(FlaskForm):
     date = DateField(default=datetime.now(), validators=[InputRequired()])
@@ -30,11 +34,11 @@ class RegistrationForm(FlaskForm):
         'Repeat Password', validators=[InputRequired(), EqualTo('password')])
     submit = SubmitField('Register')
 
+    #Support functions for registering user if username or email already taken
     def validate_username(self, username):
         user = User.query.filter_by(username=username.data).first()
         if user is not None:
             raise ValidationError('Please use a different username.')
-
     def validate_email(self, email):
         user = User.query.filter_by(email=email.data).first()
         if user is not None:

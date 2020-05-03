@@ -4,13 +4,16 @@
 <main style="color:aliceblue;">
     <div class="row align-items-end" style="margin-top: 10%;">
         <div class="col-md-4">
+            <!-- A warm welcome for our beloved users -->
             {% if current_user.is_authenticated %}
             <h3>Hi, {{ current_user.username }}!</h3>
         {% endif %}
+        <!-- Explanation of features -->
         <p class = "lead">This is your user page.</p>
         <p style="padding-top: 5%;">This is where your previous trips will be stored, so you can revisit and share them!</p>
         </div>
     </div>
+    <!-- For each crawl in the current pagination, print a horizontal list group with relevant information -->
     {% for crawl in crawls%}
     {% set bar_index = loop.index0 %}
     <ul class="list-group list-group-horizontal-lg">  <!--Insanely long url contains styling info for dynamically generated maps-->
