@@ -10,6 +10,7 @@ from datetime import datetime
 from app.utils import create_crawl, get_lat_and_lon, toDate, check_if_saved
 import json
 import ast
+import urllib.parse
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -102,7 +103,8 @@ def output():
             return redirect(url_for('login'))
         session.pop('url', None)
         polyline = request.get_json()['polyline']
-        crawl = Crawl(name='My Crawl', bar_list=str(result_list), author=current_user, polyline_string=polyline)
+        name = urllib.parse.unquote(request.get_json()['form_data'][5:])
+        crawl = Crawl(name='My Crawl', bar_list=str(result_list), author=current_user, polyline_string=polyline, name=name)
         
         db.session.add(crawl)
         db.session.commit()
