@@ -80,6 +80,12 @@
     var mapOptions = {
       zoom : 14,
       center : hop,
+      zoomControl: true,
+      mapTypeControl: false,
+      scaleControl: true,
+      streetViewControl: false,
+      rotateControl: true,
+      fullscreenControl: false,
       styles : [
   {
     "elementType": "geometry",
@@ -352,14 +358,15 @@
       {
         "color": "#17263c"
       }
-    ]
+    ],
+    
   }
 ]
     }
     // The map, centered at the barhop
     var map = new google.maps.Map(
         document.getElementById('map'), mapOptions);
-    directionsRenderer.setMap(map)
+        directionsRenderer.setMap(map)
   }
   function calcRoute() {
   var start = '{{bars[0].address}}';
@@ -381,8 +388,8 @@
         },{
           location: '{{bars[4].address|safe}}',
           stopover : true
-        }],
-        optimizeWaypoints : true
+        }]//,
+        //optimizeWaypoints : true
   };
   directionsService.route(request, function(result, status) {
     if (status == 'OK') {
@@ -405,7 +412,7 @@ $('#saveHop').submit(function() {
           data: JSON.stringify({polyline, form_data}),
           dataType: "json"
           }).done(function(resp) {
-            console.log(resp)
+            location.reload(true);
           });
           //$(this).prop('disabled', true);
     });

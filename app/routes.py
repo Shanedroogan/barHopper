@@ -104,10 +104,11 @@ def output():
         session.pop('url', None)
         polyline = request.get_json()['polyline']
         name = urllib.parse.unquote(request.get_json()['form_data'][5:])
-        crawl = Crawl(name='My Crawl', bar_list=str(result_list), author=current_user, polyline_string=polyline, name=name)
+        crawl = Crawl(name=name, bar_list=str(result_list), author=current_user, polyline_string=polyline)
         
         db.session.add(crawl)
         db.session.commit()
+        return jsonify(crawl.name)
         
 
     return render_template('final_crawl.html', title='Your Bar Hop', bars=bars,

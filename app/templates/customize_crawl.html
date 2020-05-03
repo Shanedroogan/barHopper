@@ -4,13 +4,14 @@
 <main role="main" style= "color: aliceblue;">
     <div class="text-center" style="margin-bottom: 20px;">
         <h1 class = "display-4" style="padding-top: 8%;">Customize Your Hop</h1>
-        <small class="lead"> Select on the map where you want to bar hop.</small>
+        <small class="lead"> Drag the marker on the map to pick where to bar hop.</small>
     <div class="row justify-content-center" style="margin-top: 5%;">
         <div class="col-md-6">
             <div id="map"></div>
         </div>
         <div class="col-md-4">
             <form id="submitMap" method="POST">
+                <label for="theDate">Date of Hop</label>
                 <input type="date" name="date" size = 20 class="form-control" id = "theDate">
                 <div style="margin:10%"></div>
                 <input type="submit" name="submit" id="submitButton" class="btn btn-lg btn-secondary" value="Get Hoppin!"/>
@@ -41,6 +42,12 @@
         var map = new google.maps.Map(document.getElementById('map'), {
             zoom: 12,
             center: {lat: 40.75310, lng: -73.9812},
+            zoomControl: true,
+            mapTypeControl: false,
+            scaleControl: true,
+            streetViewControl: false,
+            rotateControl: true,
+            fullscreenControl: false,
             styles: [
   {
     "elementType": "geometry",
