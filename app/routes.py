@@ -98,26 +98,29 @@ def output():
     #receives list of bar ids in bar hop
     params = request.args.get('result_list')
     result_list = [int(r) for r in params.split(',')]
-
-    date = datetime.strptime(request.args.get('date'), "%Y-%m-%d")
     
-    #Boolean value indicating whether user has saved this bar hop to profile
-    saved = False
+    if request.method == "GET":
 
-    #Only check if saved if user is authenticated, otherwise db check fails because current_user has no id
-    #if already saved, the "Save to Profile" form is disabled 
-    if current_user.is_authenticated:
-        saved = check_if_saved(result_list, date)
+        date = request.args.get('date')
+        date = datetime.strptime(date, "%Y-%m-%d")
     
-    #queries only bars in the result_list
-    bars = Bar_MasterList.query.filter(Bar_MasterList.bar_id.in_(result_list)).all()
+        #Boolean value indicating whether user has saved this bar hop to profile
+        saved = False
 
-    #string formatting for output page
-    ratings = [int(bar.rating) * '★' for bar in bars]
-    prices = [int(bar.price) * '$' for bar in bars]
+        #Only check if saved if user is authenticated, otherwise db check fails because current_user has no id
+        #if already saved, the "Save to Profile" form is disabled 
+        if current_user.is_authenticated:
+            saved = check_if_saved(result_list, date)
+    
+        #queries only bars in the result_list
+        bars = Bar_MasterList.query.filter(Bar_MasterList.bar_id.in_(result_list)).all()
 
-    #maps endpoint used to generate interactive map on output
-    maps_endpoint = f"https://maps.googleapis.com/maps/api/js?key={app.config['GEO_KEY']}&callback=initMap"
+        #string formatting for output page
+        ratings = [int(bar.rating) * '★' for bar in bars]
+        prices = [int(bar.price) * '$' for bar in bars]
+
+        #maps endpoint used to generate interactive map on output
+        maps_endpoint = f"https://maps.googleapis.com/maps/api/js?key={app.config['GEO_KEY']}&callback=initMap"
 
 
     #POST method called if user chooses to save bar crawl

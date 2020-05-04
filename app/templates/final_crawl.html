@@ -439,7 +439,7 @@ $('#saveHop').submit(function() {
         $.ajax({
           type: "POST",
           contentType: "application/json;charset=utf-8",
-          url: "{{ url_for('output', result_list=request.args.get('result_list')) }}",
+          url: "{{ url_for('output', result_list=request.args.get('result_list'), date=request.args.get('date')) }}",
           traditional: "true",
           data: JSON.stringify({polyline, form_data, date: "{{ request.args.get('date')|safe }}"}),
           dataType: "json"
