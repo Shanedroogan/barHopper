@@ -37,13 +37,37 @@
         {% set bar_index = loop.index0 %}
         <div class="card">
           <div class="row">
-            <div class="col-3">
-              <!-- Inherit card html to simplify div organization -->
-              {% include '_output_tab_nav.html' %}
-            </div>
-            <div class="col-9">
+            <!-- <div class="col-3">
+              Inherit card html to simplify div organization
+              {#{% include '_output_tab_nav.html' %}#}
+            </div> -->
+            <div class="col-md-8" style="padding-left:10%">
               <!-- Inherit card html to simplify div organization -->
               {% include '_output_tab_content.html' %}
+            </div>
+            <div class="col-md-2">
+              <button class="btn btn-success"><i class="fas fa-thumbs-up"></i></button>
+              <button class="btn btn-danger"><i class="fas fa-thumbs-down"></i></button>
+            </div>
+            <div class="col-md-2">
+              {% if bar.deals.count() > 0 %}
+                <button class="btn btn-primary" type = "button" data-toggle="collapse" data-target="#collapseDeals" aria-expanded="false" aria-controls="collapseDeals">
+                  <i class="fas fa-angle-down"></i>
+                </button>
+                {% endif %}
+            </div>
+          </div>
+          <div class="collapse" id="collapseDeals">
+            <div class = "card card-body">
+              {% if bar.deals.count() > 0 %}
+              <ul class="list-group">
+                {% for deal in bar.deals %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    {{ deal.deal_name}}
+                </li>
+                {% endfor %}
+              </ul>
+              {% endif %}
             </div>
           </div>
         </div>
@@ -417,7 +441,7 @@ $('#saveHop').submit(function() {
           contentType: "application/json;charset=utf-8",
           url: "{{ url_for('output', result_list=request.args.get('result_list')) }}",
           traditional: "true",
-          data: JSON.stringify({polyline, form_data}),
+          data: JSON.stringify({polyline, form_data, date: "{{ request.args.get('date')|safe }}"}),
           dataType: "json"
           }).done(function(resp) {
             location.reload(true);

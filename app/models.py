@@ -61,6 +61,7 @@ class Crawl(db.Model):
     __table_args__ = {'extend_existing' : True}
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(140))
+    date = db.Column(db.DateTime)
     bar_list = db.Column(db.String(140))
     polyline_string = db.Column(db.String(255))
     timestamp = db.Column(db.DateTime, index = True, default = datetime.utcnow)

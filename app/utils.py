@@ -8,9 +8,9 @@ import datetime
 from flask_login import current_user
 
 
-def check_if_saved(result_list):
+def check_if_saved(result_list, date):
     #Checks if user has bar hop with matching features
-    crawl = Crawl.query.filter_by(bar_list=str(result_list), author=current_user).first()
+    crawl = Crawl.query.filter_by(bar_list=str(result_list), author=current_user, date=date).first()
     if crawl is not None:
         return True
     else:

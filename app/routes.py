@@ -98,6 +98,8 @@ def output():
     #receives list of bar ids in bar hop
     params = request.args.get('result_list')
     result_list = [int(r) for r in params.split(',')]
+
+    date = datetime.strptime(request.args.get('date'), "%Y-%m-%d")
     
     #Boolean value indicating whether user has saved this bar hop to profile
     saved = False
@@ -105,7 +107,7 @@ def output():
     #Only check if saved if user is authenticated, otherwise db check fails because current_user has no id
     #if already saved, the "Save to Profile" form is disabled 
     if current_user.is_authenticated:
-        saved = check_if_saved(result_list)
+        saved = check_if_saved(result_list, date)
     
     #queries only bars in the result_list
     bars = Bar_MasterList.query.filter(Bar_MasterList.bar_id.in_(result_list)).all()
@@ -120,7 +122,7 @@ def output():
 
     #POST method called if user chooses to save bar crawl
     if request.method == "POST":
-
+        
         #Only logged in users can save crawl, so we redirect to login if not authenticated
         if not current_user.is_authenticated:
             # session url is stored so that user can be redirected back after login, 
@@ -133,12 +135,15 @@ def output():
         #used to generate static maps on user page 
         polyline = request.get_json()['polyline']
 
+        #Gets date of bar crawl from url
+        date = datetime.strptime(request.get_json()['date'], "%Y-%m-%d")
+
         #User can name their Bar Hop for reference later
         #urllib.parse.unquote used to decode URI encoding in form data
         name = urllib.parse.unquote(request.get_json()['form_data'][5:])
 
         #crawl object generated and added to db with backref to the current user
-        crawl = Crawl(name=name, bar_list=str(result_list), author=current_user, polyline_string=polyline)
+        crawl = Crawl(name=name, bar_list=str(result_list), author=current_user, polyline_string=polyline, date=date)
         db.session.add(crawl)
         db.session.commit()
     
