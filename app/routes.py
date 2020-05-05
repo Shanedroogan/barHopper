@@ -11,6 +11,17 @@ from app.utils import create_crawl, get_lat_and_lon, toDate, check_if_saved
 import json
 import ast
 import urllib.parse
+from markupsafe import Markup
+
+
+@app.template_filter('urlencode')
+def urlencode_filter(s):
+    """ Encodes string for entry into URL, e.g. '&', '=', etc. """
+    if type(s) == 'Markup':
+        s = s.unescape()
+    s = s.encode('utf8')
+    s = urllib.parse.quote_plus(s)
+    return Markup(s)
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -98,7 +109,7 @@ def output():
     #receives list of bar ids in bar hop
     params = request.args.get('result_list')
     result_list = [int(r) for r in params.split(',')]
-    
+
     if request.method == "GET":
 
         date = request.args.get('date')

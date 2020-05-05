@@ -45,10 +45,10 @@
               <!-- Inherit card html to simplify div organization -->
               {% include '_output_tab_content.html' %}
             </div>
-            <div class="col-md-2 my-auto">
+            <div class="col-md-2" style="margin-top:auto;">
               <button class="btn btn-success"><i class="fas fa-thumbs-up"></i></button>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-2 my-auto">
               {% if bar.deals.count() > 0 %}
                 <button class="btn btn-primary" type = "button" data-toggle="collapse" data-target="#collapseDeals" aria-expanded="false" aria-controls="collapseDeals">
                   <i class="fas fa-angle-down"></i>
@@ -56,9 +56,10 @@
                 {% endif %}
             </div>
           </div>
+          {% if bar.deals.count() > 0 %}
           <div class="collapse" id="collapseDeals">
-            <div class = "card card-body">
-              {% if bar.deals.count() > 0 %}
+            <div class="card card-body">
+              
               <ul class="list-group">
                 {% for deal in bar.deals %}
                 <li class="list-group-item d-flex justify-content-between align-items-center">
@@ -66,9 +67,9 @@
                 </li>
                 {% endfor %}
               </ul>
-              {% endif %}
             </div>
           </div>
+          {% endif %}
         </div>
         {% endfor %}
       </div>

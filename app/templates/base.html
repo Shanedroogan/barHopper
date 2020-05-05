@@ -59,7 +59,7 @@
             {% else %} <!-- if user is logged in, provide links to user page and logout endpoint-->
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('user', username=current_user.username) }}">My Crawls</a>
+                    <a class="nav-link" href="{{ url_for('user', username=current_user.username) }}">My Bar Hops</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>

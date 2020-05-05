@@ -8,7 +8,7 @@
           <h4>{{ bar.name}}</h4>
        </div>
        <div class = "row">
-          <small>{{ bar.address}}</small>
+          <small><a href="https://www.google.com/maps/search/?api=1&query={{bar.name | urlencode}}+{{bar.address | urlencode}}">{{ bar.address}}</a></small>
        </div>
        <div class = "row justify-content-between">
          <div class="col-md-4">
@@ -22,15 +22,4 @@
         </div>
        </div>
     </div>
-    {% if bar.deals.count() > 0 %} <!-- Only populate deal tab if deals exist in db -->
-    <div class="tab-pane fade" id="v-pills-deals{{bar_index}}" role="tabpanel" aria-labelledby="v-pills-deals-tab">
-        <ul class="list-group">
-          {% for deal in bar.deals %}
-          <li class="list-group-item d-flex justify-content-between align-items-center">
-              {{ deal.deal_name}}
-          </li>
-          {% endfor %}
-        </ul>
-    </div>
-    {% endif %}
   </div>
