@@ -8,6 +8,10 @@ import datetime
 from flask_login import current_user
 
 
+MANHATTAN_LNG = 73.9712
+MANHATTAN_LAT = 40.7831
+
+
 def check_if_saved(result_list, date):
     #Checks if user has bar hop with matching features
     crawl = Crawl.query.filter_by(bar_list=str(result_list), author=current_user, date=date).first()

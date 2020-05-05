@@ -14,7 +14,6 @@ from datetime import datetime
 
 class CustomizePreferences(FlaskForm):
     date = DateField(default=datetime.now(), validators=[InputRequired()])
-    address = StringField('Starting Address', validators=[InputRequired()])
     submit = SubmitField('Get Hoppin!')
 
 

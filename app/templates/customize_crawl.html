@@ -23,8 +23,8 @@
                 <p class="display-4" style="margin:10%">Or</p>
             </div>
             <!-- For adventurous users or those unfamiliar with NYC locale -->
-            <form action="" method="GET">
-                <input type="button" value="Find a Random Hop!" class="btn btn-lg btn-primary">
+            <form action="" method="POST" id="Random">
+                <input type="submit" value="Get a Random Hop!" name="action" id="randomSubmit" class="btn btn-lg btn-primary">
             </form>
         </div>
     </div>
@@ -349,6 +349,7 @@ function markerCoords(markerobject){
             FinalLatLng = evt.latLng;
             markerobject.get('map').zoom = 16;
             markerobject.get('map').panTo(evt.latLng);
+            console.log(evt.latLng.lat(), evt.latLng.lng())
     });
 
     google.maps.event.addListener(markerobject, 'drag', function(evt){

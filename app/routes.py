@@ -7,11 +7,12 @@ from app.models import User, Crawl, Deal, Bar_MasterList
 from app.email import send_password_reset_email
 from werkzeug.urls import url_parse
 from datetime import datetime
-from app.utils import create_crawl, get_lat_and_lon, toDate, check_if_saved
+from app.utils import create_crawl, get_lat_and_lon, toDate, check_if_saved, MANHATTAN_LAT, MANHATTAN_LNG
 import json
 import ast
 import urllib.parse
 from markupsafe import Markup
+import random
 
 
 @app.template_filter('urlencode')
@@ -24,8 +25,8 @@ def urlencode_filter(s):
     return Markup(s)
 
 
-@app.route('/', methods=['GET', 'POST'])
-@app.route('/index', methods=['GET', 'POST'])
+@app.route('/', methods=['GET'])
+@app.route('/index', methods=['GET'])
 def index():
     return render_template('index.html', title='Home')
 
@@ -41,14 +42,28 @@ def customize_crawl():
     #POST request sent on form submission with AJAX
     if request.method == "POST":
         
-        #Data sent in JSON format, so we interact with request.get_json() to get variables
-        date = request.get_json()['form_data'][5:]
-        
-        #lat,lng sourced from marker position on interactive map
-        lat, lng = request.get_json()['FinalLatLng']['lat'], request.get_json()['FinalLatLng']['lng']
+        ###Random Crawl button
+        if request.form['action'] == 'Get a Random Hop!':
+            lat = random.uniform(40.7134101380598, 40.77694154928337)
+            lng = random.uniform(-74.00720669860841, -73.9714367591858)
 
-        #create_crawl queries the database to retrieve a list of bar_ids based on a ranking function
-        result_list = create_crawl(user_lat=lat, user_long=lng, date=datetime.strptime(date, '%Y-%m-%d'))
+            date = datetime.now()
+
+            result_list = create_crawl(user_lat=lat, user_long=lng, date=date)
+            #list needs to be stringified to be passed as a URL parameter
+            result_list = ','.join(str(r) for r in result_list)
+
+            return redirect(url_for('output', result_list=result_list, date=date.strftime('%Y-%m-%d')))
+
+        else:
+            #Data sent in JSON format, so we interact with request.get_json() to get variables
+            date = request.get_json()['form_data'][5:]
+        
+            #lat,lng sourced from marker position on interactive map
+            lat, lng = request.get_json()['FinalLatLng']['lat'], request.get_json()['FinalLatLng']['lng']
+
+            #create_crawl queries the database to retrieve a list of bar_ids based on a ranking function
+            result_list = create_crawl(user_lat=lat, user_long=lng, date=datetime.strptime(date, '%Y-%m-%d'))
         
         #list needs to be stringified to be passed as a URL parameter
         result_list = ','.join(str(r) for r in result_list)
