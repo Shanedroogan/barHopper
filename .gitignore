@@ -8,3 +8,4 @@ __pycache__/
 #environmental variables
 *.env
 .flaskenv
+migrations/__pycache__/
