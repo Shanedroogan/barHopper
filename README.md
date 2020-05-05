@@ -1,6 +1,8 @@
 # barHopper
 
-BarHopper application runs on flask backend to find bar hops in New York City. To run it locally:
+BarHopper application runs on flask backend to find bar hops in New York City. 
+
+To run it locally:
 
 1. Fork or clone the repository to download the files
 2. Obtain the .env file from an administrator and place it in the project directory
